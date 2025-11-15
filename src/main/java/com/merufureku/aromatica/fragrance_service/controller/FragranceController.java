@@ -31,8 +31,8 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "") String correlationId,
             Pageable pageable) {
 
-        BaseParam baseParam = new BaseParam(version, correlationId);
-        BaseResponse<FragranceListResponse> response = fragranceService.getFragrances(name, brand, gender, type,
+        var baseParam = new BaseParam(version, correlationId);
+        var response = fragranceService.getFragrances(name, brand, gender, type,
                 country, pageable, baseParam);
 
         return ResponseEntity.ok(response).getBody();
@@ -45,8 +45,8 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        BaseParam baseParam = new BaseParam(version, correlationId);
-        BaseResponse<FragranceDetailedResponse> response = fragranceService.getFragrance(id, baseParam);
+        var baseParam = new BaseParam(version, correlationId);
+        var response = fragranceService.getFragrance(id, baseParam);
 
         return ResponseEntity.ok(response).getBody();
     }

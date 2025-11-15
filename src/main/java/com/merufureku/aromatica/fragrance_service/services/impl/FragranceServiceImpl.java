@@ -39,17 +39,17 @@ public class FragranceServiceImpl implements IFragranceService {
                                                              String type, String countryOfOrigin,
                                                              Pageable pageable, BaseParam baseParam) {
 
-        Page<Fragrances> fragrancesPage = fragrancesRepository.findAll(
+        var fragrancesPage = fragrancesRepository.findAll(
                 specificationHelper.buildFragranceSpecification(
                         name, brand, gender, type, countryOfOrigin),
                 pageable
         );
 
-        List<FragranceResponse> fragranceResponseList = fragrancesPage.getContent().stream()
+        var fragranceResponseList = fragrancesPage.getContent().stream()
                 .map(FragranceResponse::new)
                 .toList();
 
-        FragranceListResponse response = new FragranceListResponse(fragranceResponseList, fragrancesPage);
+        var response = new FragranceListResponse(fragranceResponseList, fragrancesPage);
         return new BaseResponse<>(HttpStatus.OK.value(), "Get Fragrance List Success", response);
     }
 
@@ -57,7 +57,7 @@ public class FragranceServiceImpl implements IFragranceService {
     public BaseResponse<FragranceDetailedResponse> getFragrance(long id, BaseParam baseParam) {
         logger.info("Fetching fragrance details for ID: {}", id);
 
-        Fragrances fragrance = fragrancesRepository.findById(id)
+        var fragrance = fragrancesRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(CustomStatusEnums.FRAGRANCE_NOT_FOUND));
 
         return new BaseResponse<>(HttpStatus.OK.value(), "Get Fragrance Detail Success", new FragranceDetailedResponse(fragrance));

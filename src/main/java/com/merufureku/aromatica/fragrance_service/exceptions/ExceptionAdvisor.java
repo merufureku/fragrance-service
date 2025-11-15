@@ -22,8 +22,8 @@ public class ExceptionAdvisor extends Exception{
             ServiceException ex,
             HttpServletRequest request
     ) {
-        CustomStatusEnums errorType = ex.getCustomStatusEnums();
-        ErrorResponse errorResponse = new ErrorResponse(
+        var errorType = ex.getCustomStatusEnums();
+        var errorResponse = new ErrorResponse(
                 errorType.getStatusCode(),
                 errorType.getHttpStatus().getReasonPhrase(),
                 errorType.getMessage(),
@@ -36,7 +36,7 @@ public class ExceptionAdvisor extends Exception{
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        var errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
             errors.put(error.getField(), error.getDefaultMessage())
         );
@@ -45,7 +45,7 @@ public class ExceptionAdvisor extends Exception{
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
+        var errors = new HashMap<>();
         ex.getConstraintViolations().forEach(violation ->
             errors.put(violation.getPropertyPath().toString(), violation.getMessage())
         );
