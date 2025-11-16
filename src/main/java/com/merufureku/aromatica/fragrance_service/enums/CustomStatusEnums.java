@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 public enum CustomStatusEnums {
 
     NO_USER_FOUND(4000, "No User Found",HttpStatus.BAD_REQUEST),
-    FRAGRANCE_NOT_FOUND(4040, "Perfume not found", HttpStatus.NOT_FOUND);
+    FRAGRANCE_NOT_FOUND(4001, "Perfume not found", HttpStatus.NOT_FOUND),
+    FRAGRANCE_ALREADY_EXIST(4002, "Perfume already exist", HttpStatus.CONFLICT);
 
     private int statusCode;
     private String message;
