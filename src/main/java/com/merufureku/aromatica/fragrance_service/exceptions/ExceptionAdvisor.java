@@ -1,6 +1,5 @@
 package com.merufureku.aromatica.fragrance_service.exceptions;
 
-import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionAdvisor extends Exception{

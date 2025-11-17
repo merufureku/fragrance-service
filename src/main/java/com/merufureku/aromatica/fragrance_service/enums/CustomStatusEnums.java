@@ -6,7 +6,10 @@ public enum CustomStatusEnums {
 
     NO_USER_FOUND(4000, "No User Found",HttpStatus.BAD_REQUEST),
     FRAGRANCE_NOT_FOUND(4001, "Perfume not found", HttpStatus.NOT_FOUND),
-    FRAGRANCE_ALREADY_EXIST(4002, "Perfume already exist", HttpStatus.CONFLICT);
+    FRAGRANCE_ALREADY_EXIST(4002, "Perfume already exist", HttpStatus.CONFLICT),
+    NOTE_ALREADY_EXIST(4040, "Note {} already exist", HttpStatus.CONFLICT),
+    NO_NOTES_TO_INSERT(4041, "No notes to insert", HttpStatus.BAD_REQUEST),
+    NOTE_NOT_EXIST(4042, "Note ID not found", HttpStatus.BAD_REQUEST);
 
     private int statusCode;
     private String message;
@@ -22,11 +25,23 @@ public enum CustomStatusEnums {
         return statusCode;
     }
 
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 }

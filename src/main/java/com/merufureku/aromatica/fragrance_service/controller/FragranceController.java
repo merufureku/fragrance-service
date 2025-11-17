@@ -1,13 +1,12 @@
 package com.merufureku.aromatica.fragrance_service.controller;
 
-import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.InsertFragranceParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.UpdateFragranceParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.InsertFragranceResponse;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,6 +91,20 @@ public class FragranceController {
         var baseParam = new BaseParam(version, correlationId);
 
         fragranceService.deleteFragrance(id, baseParam);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/fragrances/{id}/notes")
+    @ManagedOperation(description = "Update Fragrance Notes")
+    public ResponseEntity<Void> updateFragranceNotes(
+            @PathVariable("id") long id,
+            @Valid @RequestBody InsertFragranceNoteParam param,
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        fragranceService.updateFragranceNotes(id, param, baseParam);
         return ResponseEntity.noContent().build();
     }
 

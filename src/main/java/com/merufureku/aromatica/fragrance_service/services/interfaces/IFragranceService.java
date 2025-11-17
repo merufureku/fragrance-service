@@ -1,8 +1,6 @@
 package com.merufureku.aromatica.fragrance_service.services.interfaces;
 
-import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.InsertFragranceParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.UpdateFragranceParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceListResponse;
@@ -23,4 +21,6 @@ public interface IFragranceService {
     boolean updateFragrance(Long id, UpdateFragranceParam param, BaseParam baseParam);
 
     boolean deleteFragrance(Long id, BaseParam baseParam);
+
+    boolean updateFragranceNotes(Long id, InsertFragranceNoteParam param, BaseParam baseParam);
 }
