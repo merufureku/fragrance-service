@@ -1,10 +1,12 @@
 package com.merufureku.aromatica.fragrance_service.services.impl;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
+import com.merufureku.aromatica.fragrance_service.dao.entity.FragranceNotes;
+import com.merufureku.aromatica.fragrance_service.dao.entity.FragranceNotesId;
+import com.merufureku.aromatica.fragrance_service.dao.repository.FragranceNotesRepository;
 import com.merufureku.aromatica.fragrance_service.dao.repository.FragrancesRepository;
-import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.InsertFragranceParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.UpdateFragranceParam;
+import com.merufureku.aromatica.fragrance_service.dao.repository.NotesRepository;
+import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
@@ -19,8 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.FRAGRANCE_ALREADY_EXIST;
-import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.FRAGRANCE_NOT_FOUND;
+import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.*;
 
 @Service
 @Transactional
@@ -29,12 +30,16 @@ public class FragranceServiceImpl implements IFragranceService {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     private final FragrancesRepository fragrancesRepository;
+    private final FragranceNotesRepository fragranceNotesRepository;
+    private final NotesRepository notesRepository;
     private final FragranceHelper fragranceHelper;
     private final SpecificationHelper specificationHelper;
 
-    public FragranceServiceImpl(FragrancesRepository fragrancesRepository, FragranceHelper fragranceHelper,
+    public FragranceServiceImpl(FragrancesRepository fragrancesRepository, FragranceNotesRepository fragranceNotesRepository, NotesRepository notesRepository, FragranceHelper fragranceHelper,
                                 SpecificationHelper specificationHelper) {
         this.fragrancesRepository = fragrancesRepository;
+        this.fragranceNotesRepository = fragranceNotesRepository;
+        this.notesRepository = notesRepository;
         this.fragranceHelper = fragranceHelper;
         this.specificationHelper = specificationHelper;
     }
@@ -123,6 +128,29 @@ public class FragranceServiceImpl implements IFragranceService {
         }
 
         fragrancesRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public boolean updateFragranceNotes(Long id, InsertFragranceNoteParam param, BaseParam baseParam) {
+        logger.info("Updating Fragrance Notes for ID: {}", id);
+
+        if (!fragrancesRepository.existsById(id)){
+            throw new ServiceException(FRAGRANCE_NOT_FOUND);
+        }
+
+        var noteList = notesRepository.findAllById(param.notes().stream()
+                .map(InsertFragranceNoteParam.FragranceNoteRequest::id).toList());
+
+        var newNotesToInsert = noteList.stream().map(
+                note -> FragranceNotes.builder()
+                        .id(new FragranceNotesId(id, note.getId()))
+                        .build())
+                .toList();
+
+        logger.info("Saving {} fragrance notes for fragrance ID: {}", newNotesToInsert.size(), id);
+        fragranceNotesRepository.saveAll(newNotesToInsert);
+
         return true;
     }
 }

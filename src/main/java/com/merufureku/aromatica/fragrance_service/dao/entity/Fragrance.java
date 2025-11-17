@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "fragrances")
@@ -42,4 +44,12 @@ public class Fragrance {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @ManyToMany
+    @JoinTable(
+            name = "fragrance_notes",
+            joinColumns = @JoinColumn(name = "fragrance_id"),
+            inverseJoinColumns = @JoinColumn(name = "note_id")
+    )
+    private List<Notes> notes;
 }
