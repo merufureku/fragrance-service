@@ -1,10 +1,7 @@
 package com.merufureku.aromatica.fragrance_service.services.interfaces;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
-import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceListResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.InsertFragranceResponse;
+import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import org.springframework.data.domain.Pageable;
 
 
@@ -22,5 +19,9 @@ public interface IFragranceService {
 
     boolean deleteFragrance(Long id, BaseParam baseParam);
 
-    boolean updateFragranceNotes(Long id, InsertFragranceNoteParam param, BaseParam baseParam);
+    BaseResponse<NoteListResponse> getFragranceNotes(Long id, Pageable pageable, BaseParam baseParam);
+
+    boolean updateFragranceNote(Long id, InsertFragranceNoteParam param, BaseParam baseParam);
+
+    boolean deleteFragranceNote(Long id, Long noteId, BaseParam baseParam);
 }

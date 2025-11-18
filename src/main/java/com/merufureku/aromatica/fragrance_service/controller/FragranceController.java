@@ -1,16 +1,13 @@
 package com.merufureku.aromatica.fragrance_service.controller;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
-import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceListResponse;
-import com.merufureku.aromatica.fragrance_service.dto.responses.InsertFragranceResponse;
+import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +20,7 @@ public class FragranceController {
     }
 
     @GetMapping("/fragrances")
-    @ManagedOperation(description = "Get list of fragrances")
+    @Operation(summary = "Get list of fragrances")
     public ResponseEntity<BaseResponse<FragranceListResponse>> getFragrances(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
@@ -42,7 +39,7 @@ public class FragranceController {
     }
 
     @GetMapping("/fragrances/{id}")
-    @ManagedOperation(description = "Get Fragrance")
+    @Operation(summary = "Get Fragrance")
     public ResponseEntity<BaseResponse<FragranceDetailedResponse>> getFragrance(
             @PathVariable("id") long id,
             @RequestParam(required = false, defaultValue = "1") int version,
@@ -55,7 +52,7 @@ public class FragranceController {
     }
 
     @PostMapping("/fragrances")
-    @ManagedOperation(description = "Insert Fragrance")
+    @Operation(summary = "Insert Fragrance")
     public ResponseEntity<BaseResponse<InsertFragranceResponse>> createFragrance(
             @RequestBody InsertFragranceParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
@@ -68,7 +65,7 @@ public class FragranceController {
     }
 
     @PutMapping("/fragrances/{id}")
-    @ManagedOperation(description = "Update Fragrance")
+    @Operation(summary = "Update Fragrance")
     public ResponseEntity<Void> updateFragrance(
             @PathVariable("id") long id,
             @RequestBody UpdateFragranceParam param,
@@ -82,7 +79,7 @@ public class FragranceController {
     }
 
     @DeleteMapping("/fragrances/{id}")
-    @ManagedOperation(description = "Deleting Fragrance")
+    @Operation(summary = "Delete Fragrance")
     public ResponseEntity<Void> deleteFragrance(
             @PathVariable("id") long id,
             @RequestParam(required = false, defaultValue = "1") int version,
@@ -94,9 +91,23 @@ public class FragranceController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/fragrances/{id}/notes")
-    @ManagedOperation(description = "Update Fragrance Notes")
-    public ResponseEntity<Void> updateFragranceNotes(
+    @GetMapping("/fragrances/{id}/notes")
+    @Operation(summary = "Get Fragrance Notes")
+    public ResponseEntity<BaseResponse<NoteListResponse>> updateFragranceNote(
+            @PathVariable("id") long id,
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId,
+            Pageable pageable) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        var response = fragranceService.getFragranceNotes(id, pageable, baseParam);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/fragrances/{id}/notes")
+    @Operation(summary = "Insert New Fragrance Note")
+    public ResponseEntity<Void> updateFragranceNote(
             @PathVariable("id") long id,
             @Valid @RequestBody InsertFragranceNoteParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
@@ -104,10 +115,23 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        fragranceService.updateFragranceNotes(id, param, baseParam);
+        fragranceService.updateFragranceNote(id, param, baseParam);
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/fragrances/{id}/notes/{noteId}")
+    @Operation(summary = "Delete Fragrance Note")
+    public ResponseEntity<Void> deleteFragranceNote(
+            @PathVariable("id") long id,
+            @PathVariable("noteId") long noteId,
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        fragranceService.deleteFragranceNote(id, noteId, baseParam);
+        return ResponseEntity.noContent().build();
+    }
 }
 
 

@@ -132,7 +132,22 @@ public class FragranceServiceImpl implements IFragranceService {
     }
 
     @Override
-    public boolean updateFragranceNotes(Long id, InsertFragranceNoteParam param, BaseParam baseParam) {
+    public BaseResponse<NoteListResponse> getFragranceNotes(Long id, Pageable pageable, BaseParam baseParam) {
+        logger.info("Fetching Fragrance Notes for ID: {}", id);
+
+        var fragranceToGet = fragrancesRepository.findById(id)
+                .orElseThrow(() -> new ServiceException(FRAGRANCE_NOT_FOUND));
+
+        var response = fragranceToGet.getNotes().stream()
+                .map(NoteResponse::new)
+                .toList();
+
+        return new BaseResponse<>(HttpStatus.OK.value(), "Get Fragrance Notes Success",
+                new NoteListResponse(response, pageable));
+    }
+
+    @Override
+    public boolean updateFragranceNote(Long id, InsertFragranceNoteParam param, BaseParam baseParam) {
         logger.info("Updating Fragrance Notes for ID: {}", id);
 
         if (!fragrancesRepository.existsById(id)){
@@ -152,5 +167,31 @@ public class FragranceServiceImpl implements IFragranceService {
         fragranceNotesRepository.saveAll(newNotesToInsert);
 
         return true;
+    }
+
+    @Override
+    public boolean deleteFragranceNote(Long id, Long noteId, BaseParam baseParam) {
+        logger.info("Removing Note ID for {} fragrance: {}", noteId, id);
+
+        if (!fragrancesRepository.existsById(id)){
+            throw new ServiceException(FRAGRANCE_NOT_FOUND);
+        }
+
+        var fragranceNoteId = new FragranceNotesId(id, noteId);
+
+        if (!fragranceNotesRepository.existsById(fragranceNoteId)) {
+            throw new ServiceException(CustomStatusEnums.NOTE_NOT_EXIST);
+        }
+
+        try{
+            fragranceNotesRepository.deleteById(fragranceNoteId);
+
+            logger.info("Successfully removed Note ID {} from Fragrance ID {}", noteId, id);
+            return true;
+        }
+        catch (Exception e){
+            logger.error("Error occurred while deleting fragrance note: {}", e.getMessage());
+            throw new ServiceException(CustomStatusEnums.NOTE_NOT_EXIST);
+        }
     }
 }
