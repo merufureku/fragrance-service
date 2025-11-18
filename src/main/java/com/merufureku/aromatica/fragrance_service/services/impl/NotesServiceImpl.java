@@ -11,6 +11,8 @@ import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.INotesService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.NOTE_ALREADY_EXIST;
-import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.NO_NOTES_TO_INSERT;
+import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.*;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class NotesServiceImpl implements INotesService {
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     private final NotesRepository notesRepository;
     private final SpecificationHelper specificationHelper;
@@ -35,6 +38,8 @@ public class NotesServiceImpl implements INotesService {
 
     @Override
     public BaseResponse<NoteListResponse> getNotes(String name, String type, Pageable pageable, BaseParam baseParam) {
+
+        logger.info("Fetching notes with name: {} and type: {}", name, type);
 
         var notes = notesRepository.findAll(
                 specificationHelper.buildNotesSpecification(
@@ -52,12 +57,17 @@ public class NotesServiceImpl implements INotesService {
 
     @Override
     public BaseResponse<Void> insertNotes(InsertNoteParam param, BaseParam baseParam) {
+
+        logger.info("Inserting new notes");
+
         if (param == null || param.notes() == null || param.notes().isEmpty()) {
+            logger.error("No notes to insert");
             throw new ServiceException(NO_NOTES_TO_INSERT);
         }
 
         for (InsertNoteParam.NoteRequest noteRequest : param.notes()) {
             if (notesRepository.existsByName(noteRequest.name())) {
+                logger.error("Note already exists: {}", noteRequest.name());
                 CustomStatusEnums customStatusEnums = NOTE_ALREADY_EXIST;
                 customStatusEnums.setMessage(NOTE_ALREADY_EXIST.getMessage().replace("{}", noteRequest.name()));
 
@@ -75,5 +85,30 @@ public class NotesServiceImpl implements INotesService {
         notesRepository.saveAll(notesToSave);
 
         return new BaseResponse<>(HttpStatus.CREATED.value(), "Insert Notes Success", null);
+    }
+
+    @Override
+    public BaseResponse<NoteResponse> getNoteById(Long noteId, BaseParam baseParam) {
+
+        logger.info("Fetching note with ID: {}", noteId);
+
+        var note = notesRepository.findById(noteId)
+                .orElseThrow(() -> new ServiceException(CustomStatusEnums.NOTE_NOT_EXIST));
+
+        return new BaseResponse<>(HttpStatus.OK.value(), "Get Note Success", new NoteResponse(note));
+    }
+
+    @Override
+    public boolean deleteNoteById(Long noteId, BaseParam baseParam) {
+        if (!notesRepository.existsById(noteId)) {
+            logger.error("Note does not exist with ID: {}", noteId);
+            throw new ServiceException(NOTE_NOT_EXIST);
+        }
+
+        notesRepository.deleteById(noteId);
+
+        logger.info("Deleted note with ID: {}", noteId);
+
+        return true;
     }
 }

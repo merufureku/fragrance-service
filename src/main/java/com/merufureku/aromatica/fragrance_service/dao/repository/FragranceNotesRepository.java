@@ -6,4 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FragranceNotesRepository extends JpaRepository<FragranceNotes, FragranceNotesId> {}
+public interface FragranceNotesRepository extends JpaRepository<FragranceNotes, FragranceNotesId> {
+
+    boolean existsById(FragranceNotesId id);
+
+    void deleteById(FragranceNotesId id);
+
+}

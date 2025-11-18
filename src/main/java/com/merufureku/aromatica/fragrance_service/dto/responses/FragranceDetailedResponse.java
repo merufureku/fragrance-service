@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public record FragranceDetailedResponse(Long id, String name, String brand,
                                         String description, String gender, int releaseYear,
-                                        String imageUrl, Map<String, List<String>> notes) {
+                                        String imageUrl, Map<String, List<NoteResponse>> notes) {
 
     public FragranceDetailedResponse(Fragrance fragrance){
         this(
@@ -21,10 +21,12 @@ public record FragranceDetailedResponse(Long id, String name, String brand,
             fragrance.getReleaseYear(),
             fragrance.getImageUrl(),
             fragrance.getNotes().stream()
-                .collect(Collectors.groupingBy(
-                    Notes::getType,
-                    Collectors.mapping(Notes::getName, Collectors.toList())
+                .collect(Collectors.groupingBy(Notes::getType,
+                        Collectors.mapping(note -> new NoteResponse(note.getId(), note.getName()),
+                                Collectors.toList())
                 ))
         );
     }
+
+    record NoteResponse(Long id, String name) {}
 }
