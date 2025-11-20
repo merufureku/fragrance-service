@@ -1,4 +1,4 @@
-package com.merufureku.aromatica.fragrance_service.services.impl;
+package com.merufureku.aromatica.fragrance_service.impl.impl;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Notes;
 import com.merufureku.aromatica.fragrance_service.dao.repository.NotesRepository;
@@ -10,7 +10,7 @@ import com.merufureku.aromatica.fragrance_service.dto.responses.NoteResponse;
 import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.services.interfaces.INotesService;
+import com.merufureku.aromatica.fragrance_service.impl.interfaces.INotesService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;

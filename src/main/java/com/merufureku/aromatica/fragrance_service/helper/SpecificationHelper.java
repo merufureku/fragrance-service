@@ -27,5 +27,4 @@ public class SpecificationHelper {
                     .and(FragranceSpecification.hasCountryOfOrigin(countryOfOrigin)
                 );
     }
-
 }
