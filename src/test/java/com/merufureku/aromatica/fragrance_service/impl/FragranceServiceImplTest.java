@@ -1,4 +1,4 @@
-package com.merufureku.aromatica.fragrance_service.services;
+package com.merufureku.aromatica.fragrance_service.impl;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 import com.merufureku.aromatica.fragrance_service.dao.entity.FragranceNotesId;
@@ -7,11 +7,12 @@ import com.merufureku.aromatica.fragrance_service.dao.repository.FragranceNotesR
 import com.merufureku.aromatica.fragrance_service.dao.repository.FragrancesRepository;
 import com.merufureku.aromatica.fragrance_service.dao.repository.NotesRepository;
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
+import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.FragranceHelper;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.services.impl.FragranceServiceImpl;
+import com.merufureku.aromatica.fragrance_service.impl.impl.FragranceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +54,7 @@ class FragranceServiceImplTest {
     private SpecificationHelper specificationHelper;
 
     private BaseParam baseParam;
-    private Fragrance testFragrance;
+    private Fragrance fragrance;
     private Pageable pageable;
 
     @BeforeEach
@@ -62,7 +62,7 @@ class FragranceServiceImplTest {
         baseParam = new BaseParam(1, "tester");
         pageable = PageRequest.of(0, 10);
 
-        testFragrance = Fragrance.builder()
+        fragrance = Fragrance.builder()
                 .id(1L)
                 .name("Test Fragrance")
                 .brand("Test Brand")
@@ -78,15 +78,15 @@ class FragranceServiceImplTest {
 
     @Test
     void testGetFragrances_thenReturnFragranceList() {
-        List<Fragrance> fragrances = Collections.singletonList(testFragrance);
-        Page<Fragrance> fragrancePage = new PageImpl<>(fragrances, pageable, fragrances.size());
+        var fragrances = Collections.singletonList(fragrance);
+        var fragrancePage = new PageImpl<>(fragrances, pageable, fragrances.size());
 
         when(specificationHelper.buildFragranceSpecification(any(), any(), any(), any(), any()))
                 .thenReturn(mock(Specification.class));
         when(fragrancesRepository.findAll(any(Specification.class), eq(pageable)))
                 .thenReturn(fragrancePage);
 
-        var response = fragranceService.getFragrances(
+        BaseResponse<FragranceListResponse> response = fragranceService.getFragrances(
                 "Test", "Brand", "Unisex", "Parfum", "France", pageable, baseParam);
 
         assertNotNull(response);
@@ -100,9 +100,9 @@ class FragranceServiceImplTest {
 
     @Test
     void testGetFragrance_whenExists_thenReturnFragranceDetail() {
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(testFragrance));
+        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(fragrance));
 
-        var response = fragranceService.getFragrance(1L, baseParam);
+        BaseResponse<FragranceDetailedResponse> response = fragranceService.getFragrance(1L, baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK.value(), response.status());
@@ -125,15 +125,15 @@ class FragranceServiceImplTest {
 
     @Test
     void testInsertFragrance_whenValid_thenInsertSuccessfully() {
-        InsertFragranceParam param = new InsertFragranceParam(
+        var param = new InsertFragranceParam(
                 "New Fragrance", "New Brand", "Description", "Parfum",
                 "Italy", "Male", 2024, "http://test.com/new.jpg");
 
         when(fragrancesRepository.existsByNameAndBrand(param.name(), param.brand()))
                 .thenReturn(false);
-        when(fragrancesRepository.save(any(Fragrance.class))).thenReturn(testFragrance);
+        when(fragrancesRepository.save(any(Fragrance.class))).thenReturn(fragrance);
 
-        var response = fragranceService.insertFragrance(param, baseParam);
+        BaseResponse<InsertFragranceResponse> response = fragranceService.insertFragrance(param, baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED.value(), response.status());
@@ -145,7 +145,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testInsertFragrance_whenAlreadyExists_thenThrowException() {
-        InsertFragranceParam param = new InsertFragranceParam(
+        var param = new InsertFragranceParam(
                 "Existing", "Brand", "Desc", "Type", "Country", "Gender", 2023, "url");
 
         when(fragrancesRepository.existsByNameAndBrand(param.name(), param.brand()))
@@ -161,7 +161,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testInsertFragrance_whenDataIntegrityViolation_thenThrowException() {
-        InsertFragranceParam param = new InsertFragranceParam(
+        var param = new InsertFragranceParam(
                 "New", "Brand", "Desc", "Type", "Country", "Gender", 2023, "url");
 
         when(fragrancesRepository.existsByNameAndBrand(param.name(), param.brand()))
@@ -177,24 +177,24 @@ class FragranceServiceImplTest {
 
     @Test
     void testUpdateFragrance_whenExists_thenUpdateSuccessfully() {
-        UpdateFragranceParam param = mock(UpdateFragranceParam.class);
-        Fragrance updatedFragrance = testFragrance;
+        var param = mock(UpdateFragranceParam.class);
+        var updatedFragrance = fragrance;
 
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(testFragrance));
-        when(fragranceHelper.updateFragrance(testFragrance, param)).thenReturn(updatedFragrance);
+        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(fragrance));
+        when(fragranceHelper.updateFragrance(fragrance, param)).thenReturn(updatedFragrance);
         when(fragrancesRepository.save(updatedFragrance)).thenReturn(updatedFragrance);
 
         boolean result = fragranceService.updateFragrance(1L, param, baseParam);
 
         assertTrue(result);
         verify(fragrancesRepository, atMost(1)).findById(1L);
-        verify(fragranceHelper, atMost(1)).updateFragrance(testFragrance, param);
+        verify(fragranceHelper, atMost(1)).updateFragrance(fragrance, param);
         verify(fragrancesRepository, atMost(1)).save(updatedFragrance);
     }
 
     @Test
     void testUpdateFragrance_whenNotExists_thenThrowException() {
-        UpdateFragranceParam param = mock(UpdateFragranceParam.class);
+        var param = mock(UpdateFragranceParam.class);
         when(fragrancesRepository.findById(1L)).thenReturn(Optional.empty());
 
         ServiceException exception = assertThrows(ServiceException.class,
@@ -231,12 +231,12 @@ class FragranceServiceImplTest {
 
     @Test
     void testGetFragranceNotes_whenFragranceExists_thenReturnNotes() {
-        List<Notes> notes = new ArrayList<>();
-        testFragrance.setNotes(notes);
+        var notes = new ArrayList<Notes>();
+        fragrance.setNotes(notes);
 
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(testFragrance));
+        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(fragrance));
 
-        var response = fragranceService.getFragranceNotes(1L, pageable, baseParam);
+        BaseResponse<NoteListResponse> response = fragranceService.getFragranceNotes(1L, pageable, baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK.value(), response.status());
@@ -257,16 +257,16 @@ class FragranceServiceImplTest {
 
     @Test
     void testUpdateFragranceNote_thenAddNotesToFragrance() {
-        Set<InsertFragranceNoteParam.FragranceNoteRequest> noteRequests = new HashSet<>(Arrays.asList(
+        var noteRequests = new HashSet<>(Arrays.asList(
                 new InsertFragranceNoteParam.FragranceNoteRequest(1L),
                 new InsertFragranceNoteParam.FragranceNoteRequest(2L)
         ));
 
-        InsertFragranceNoteParam param = new InsertFragranceNoteParam(noteRequests);
+        var param = new InsertFragranceNoteParam(noteRequests);
 
-        Notes note1 = Notes.builder().id(1L).build();
-        Notes note2 = Notes.builder().id(2L).build();
-        List<Notes> notes = Arrays.asList(note1, note2);
+        var note1 = Notes.builder().id(1L).build();
+        var note2 = Notes.builder().id(2L).build();
+        var notes = Arrays.asList(note1, note2);
 
         when(fragrancesRepository.existsById(1L)).thenReturn(true);
         when(notesRepository.findAllById(anyList())).thenReturn(notes);
@@ -282,7 +282,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testUpdateFragranceNote_whenFragranceNotExists_thenThrowException() {
-        InsertFragranceNoteParam param = new InsertFragranceNoteParam(new HashSet<>());
+        var param = new InsertFragranceNoteParam(new HashSet<>());
 
         when(fragrancesRepository.existsById(1L)).thenReturn(false);
 
@@ -294,7 +294,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testDeleteFragranceNote_whenExists_thenDeleteSuccessfully() {
-        FragranceNotesId fragranceNotesId = new FragranceNotesId(1L, 2L);
+        var fragranceNotesId = new FragranceNotesId(1L, 2L);
 
         when(fragrancesRepository.existsById(1L)).thenReturn(true);
         when(fragranceNotesRepository.existsById(fragranceNotesId)).thenReturn(true);
@@ -321,7 +321,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testDeleteFragranceNote_whenNoteNotExists_thenThrowException() {
-        FragranceNotesId fragranceNotesId = new FragranceNotesId(1L, 2L);
+        var fragranceNotesId = new FragranceNotesId(1L, 2L);
 
         when(fragrancesRepository.existsById(1L)).thenReturn(true);
         when(fragranceNotesRepository.existsById(fragranceNotesId)).thenReturn(false);
@@ -335,8 +335,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testDeleteFragranceNote_whenDeletionFails_thenThrowException() {
-        
-        FragranceNotesId fragranceNotesId = new FragranceNotesId(1L, 2L);
+        var fragranceNotesId = new FragranceNotesId(1L, 2L);
 
         when(fragrancesRepository.existsById(1L)).thenReturn(true);
         when(fragranceNotesRepository.existsById(fragranceNotesId)).thenReturn(true);

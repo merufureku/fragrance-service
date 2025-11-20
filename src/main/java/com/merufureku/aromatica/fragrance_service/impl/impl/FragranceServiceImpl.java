@@ -1,4 +1,4 @@
-package com.merufureku.aromatica.fragrance_service.services.impl;
+package com.merufureku.aromatica.fragrance_service.impl.impl;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 import com.merufureku.aromatica.fragrance_service.dao.entity.FragranceNotes;
@@ -12,7 +12,7 @@ import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.FragranceHelper;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
+import com.merufureku.aromatica.fragrance_service.impl.interfaces.IFragranceService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums.*;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class FragranceServiceImpl implements IFragranceService {
 
     private final Logger logger = LogManager.getLogger(this.getClass());

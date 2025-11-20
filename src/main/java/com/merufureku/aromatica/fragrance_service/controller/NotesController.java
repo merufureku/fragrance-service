@@ -5,7 +5,7 @@ import com.merufureku.aromatica.fragrance_service.dto.params.InsertNoteParam;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.NoteListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.NoteResponse;
-import com.merufureku.aromatica.fragrance_service.services.interfaces.INotesService;
+import com.merufureku.aromatica.fragrance_service.impl.interfaces.INotesService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
