@@ -2,7 +2,7 @@ package com.merufureku.aromatica.fragrance_service.controller;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.*;
-import com.merufureku.aromatica.fragrance_service.impl.interfaces.IFragranceService;
+import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;

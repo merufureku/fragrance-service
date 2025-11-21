@@ -1,4 +1,4 @@
-package com.merufureku.aromatica.fragrance_service.impl;
+package com.merufureku.aromatica.fragrance_service.services;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Notes;
 import com.merufureku.aromatica.fragrance_service.dao.repository.NotesRepository;
@@ -10,7 +10,7 @@ import com.merufureku.aromatica.fragrance_service.dto.responses.NoteResponse;
 import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.impl.impl.NotesServiceImpl;
+import com.merufureku.aromatica.fragrance_service.services.impl.NotesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

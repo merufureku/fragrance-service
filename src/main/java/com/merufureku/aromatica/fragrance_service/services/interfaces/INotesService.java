@@ -1,4 +1,4 @@
-package com.merufureku.aromatica.fragrance_service.impl.interfaces;
+package com.merufureku.aromatica.fragrance_service.services.interfaces;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
 import com.merufureku.aromatica.fragrance_service.dto.params.InsertNoteParam;
