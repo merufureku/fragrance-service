@@ -2,7 +2,7 @@ package com.merufureku.aromatica.fragrance_service.controller;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.*;
-import com.merufureku.aromatica.fragrance_service.impl.interfaces.IFragranceService;
+import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,7 @@ public class FragranceController {
         this.fragranceService = fragranceService;
     }
 
-    @GetMapping("/fragrances")
+    @GetMapping("/public/fragrances")
     @Operation(summary = "Get list of fragrances")
     public ResponseEntity<BaseResponse<FragranceListResponse>> getFragrances(
             @RequestParam(required = false) String name,
@@ -38,7 +38,7 @@ public class FragranceController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/fragrances/{id}")
+    @GetMapping("/public/fragrances/{id}")
     @Operation(summary = "Get Fragrance")
     public ResponseEntity<BaseResponse<FragranceDetailedResponse>> getFragrance(
             @PathVariable("id") long id,
@@ -91,7 +91,7 @@ public class FragranceController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/fragrances/{id}/notes")
+    @GetMapping("/public/fragrances/{id}/notes")
     @Operation(summary = "Get Fragrance Notes")
     public ResponseEntity<BaseResponse<NoteListResponse>> updateFragranceNote(
             @PathVariable("id") long id,
