@@ -21,7 +21,7 @@ public class NotesController {
         this.notesService = notesService;
     }
 
-    @GetMapping("/notes")
+    @GetMapping("/public/notes")
     @Operation(summary = "Get notes")
     public ResponseEntity<BaseResponse<NoteListResponse>> getNote(
             @RequestParam(required = false) String name,

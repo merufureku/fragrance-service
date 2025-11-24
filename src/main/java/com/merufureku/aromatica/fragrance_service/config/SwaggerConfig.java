@@ -24,9 +24,8 @@ public class SwaggerConfig {
                                         .bearerFormat("JWT")
                                         .in(SecurityScheme.In.HEADER)))
                 .info(new Info()
-                .title("User Auth Management API")
+                .title("Fragrance Management API")
                 .version("1.0")
-                .description("API Documentation for User Auth Management"));
+                .description("API Documentation for Fragrance Management"));
     }
-
 }
