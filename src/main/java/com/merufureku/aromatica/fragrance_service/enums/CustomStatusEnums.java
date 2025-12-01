@@ -1,7 +1,9 @@
 package com.merufureku.aromatica.fragrance_service.enums;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public enum CustomStatusEnums {
 
     NO_USER_FOUND(4000, "No User Found",HttpStatus.BAD_REQUEST),
@@ -22,27 +24,7 @@ public enum CustomStatusEnums {
         this.httpStatus = httpStatus;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
-    }
-
-    public void setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
     }
 }
