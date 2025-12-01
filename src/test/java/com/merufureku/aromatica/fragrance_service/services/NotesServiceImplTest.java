@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class NotesServiceImplTest {
@@ -84,7 +84,7 @@ public class NotesServiceImplTest {
         assertEquals(HttpStatus.OK.value(), response.status());
         assertEquals(1, response.data().noteResponseList().size());
 
-        verify(notesRepository, atMost(1)).findAll(any(Specification.class), eq(pageable));
+        verify(notesRepository, times(1)).findAll(any(Specification.class), eq(pageable));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class NotesServiceImplTest {
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED.value(), response.status());
 
-        verify(notesRepository, atMost(1)).saveAll(anyList());
+        verify(notesRepository, times(1)).saveAll(anyList());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class NotesServiceImplTest {
         assertEquals(HttpStatus.OK.value(), response.status());
         assertNotNull(response.data());
 
-        verify(notesRepository, atMost(1)).findById(1L);
+        verify(notesRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class NotesServiceImplTest {
                 notesServiceImpl.getNoteById(1L, baseParam));
 
         assertEquals(CustomStatusEnums.NOTE_NOT_EXIST, exception.getCustomStatusEnums());
-        verify(notesRepository, atMost(1)).findById(1L);
+        verify(notesRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -175,8 +175,8 @@ public class NotesServiceImplTest {
         boolean result = notesServiceImpl.deleteNoteById(1L, baseParam);
 
         assertTrue(result);
-        verify(notesRepository, atMost(1)).existsById(1L);
-        verify(notesRepository, atMost(1)).deleteById(1L);
+        verify(notesRepository, times(1)).existsById(1L);
+        verify(notesRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class NotesServiceImplTest {
                 notesServiceImpl.deleteNoteById(1L, baseParam));
 
         assertEquals(CustomStatusEnums.NOTE_NOT_EXIST, exception.getCustomStatusEnums());
-        verify(notesRepository, atMost(1)).existsById(1L);
+        verify(notesRepository, times(1)).existsById(1L);
         verify(notesRepository, never()).deleteById(1L);
     }
 }

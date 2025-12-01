@@ -95,7 +95,7 @@ class FragranceServiceImplTest {
         assertNotNull(response.data());
         assertEquals(1, response.data().fragranceResponseList().size());
 
-        verify(fragrancesRepository, atMost(1)).findAll(any(Specification.class), eq(pageable));
+        verify(fragrancesRepository, times(1)).findAll(any(Specification.class), eq(pageable));
     }
 
     @Test
@@ -109,7 +109,7 @@ class FragranceServiceImplTest {
         assertEquals("Get Fragrance Detail Success", response.message());
         assertNotNull(response.data());
 
-        verify(fragrancesRepository, atMost(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -120,7 +120,7 @@ class FragranceServiceImplTest {
                 () -> fragranceService.getFragrance(1L, baseParam));
 
         assertEquals(CustomStatusEnums.FRAGRANCE_NOT_FOUND, exception.getCustomStatusEnums());
-        verify(fragrancesRepository, atMost(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -139,8 +139,8 @@ class FragranceServiceImplTest {
         assertEquals(HttpStatus.CREATED.value(), response.status());
         assertEquals("Insert Fragrance Success", response.message());
 
-        verify(fragrancesRepository, atMost(1)).existsByNameAndBrand(param.name(), param.brand());
-        verify(fragrancesRepository, atMost(1)).save(any(Fragrance.class));
+        verify(fragrancesRepository, times(1)).existsByNameAndBrand(param.name(), param.brand());
+        verify(fragrancesRepository, times(1)).save(any(Fragrance.class));
     }
 
     @Test
@@ -155,7 +155,7 @@ class FragranceServiceImplTest {
                 () -> fragranceService.insertFragrance(param, baseParam));
 
         assertEquals(CustomStatusEnums.FRAGRANCE_ALREADY_EXIST, exception.getCustomStatusEnums());
-        verify(fragrancesRepository, atMost(1)).existsByNameAndBrand(param.name(), param.brand());
+        verify(fragrancesRepository, times(1)).existsByNameAndBrand(param.name(), param.brand());
         verify(fragrancesRepository, never()).save(any(Fragrance.class));
     }
 
@@ -187,9 +187,9 @@ class FragranceServiceImplTest {
         boolean result = fragranceService.updateFragrance(1L, param, baseParam);
 
         assertTrue(result);
-        verify(fragrancesRepository, atMost(1)).findById(1L);
-        verify(fragranceHelper, atMost(1)).updateFragrance(fragrance, param);
-        verify(fragrancesRepository, atMost(1)).save(updatedFragrance);
+        verify(fragrancesRepository, times(1)).findById(1L);
+        verify(fragranceHelper, times(1)).updateFragrance(fragrance, param);
+        verify(fragrancesRepository, times(1)).save(updatedFragrance);
     }
 
     @Test
@@ -201,7 +201,7 @@ class FragranceServiceImplTest {
                 () -> fragranceService.updateFragrance(1L, param, baseParam));
 
         assertEquals(CustomStatusEnums.FRAGRANCE_NOT_FOUND, exception.getCustomStatusEnums());
-        verify(fragrancesRepository, atMost(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findById(1L);
         verify(fragranceHelper, never()).updateFragrance(any(), any());
     }
 
@@ -213,8 +213,8 @@ class FragranceServiceImplTest {
         boolean result = fragranceService.deleteFragrance(1L, baseParam);
 
         assertTrue(result);
-        verify(fragrancesRepository, atMost(1)).existsById(1L);
-        verify(fragrancesRepository, atMost(1)).deleteById(1L);
+        verify(fragrancesRepository, times(1)).existsById(1L);
+        verify(fragrancesRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -225,7 +225,7 @@ class FragranceServiceImplTest {
                 () -> fragranceService.deleteFragrance(1L, baseParam));
 
         assertEquals(CustomStatusEnums.FRAGRANCE_NOT_FOUND, exception.getCustomStatusEnums());
-        verify(fragrancesRepository, atMost(1)).existsById(1L);
+        verify(fragrancesRepository, times(1)).existsById(1L);
         verify(fragrancesRepository, never()).deleteById(anyLong());
     }
 
@@ -242,7 +242,7 @@ class FragranceServiceImplTest {
         assertEquals(HttpStatus.OK.value(), response.status());
         assertEquals("Get Fragrance Notes Success", response.message());
 
-        verify(fragrancesRepository, atMost(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -275,9 +275,9 @@ class FragranceServiceImplTest {
         boolean result = fragranceService.updateFragranceNote(1L, param, baseParam);
 
         assertTrue(result);
-        verify(fragrancesRepository, atMost(1)).existsById(1L);
-        verify(notesRepository, atMost(1)).findAllById(anyList());
-        verify(fragranceNotesRepository, atMost(1)).saveAll(anyList());
+        verify(fragrancesRepository, times(1)).existsById(1L);
+        verify(notesRepository, times(1)).findAllById(anyList());
+        verify(fragranceNotesRepository, times(1)).saveAll(anyList());
     }
 
     @Test
@@ -303,9 +303,9 @@ class FragranceServiceImplTest {
         boolean result = fragranceService.deleteFragranceNote(1L, 2L, baseParam);
 
         assertTrue(result);
-        verify(fragrancesRepository, atMost(1)).existsById(1L);
-        verify(fragranceNotesRepository, atMost(1)).existsById(fragranceNotesId);
-        verify(fragranceNotesRepository, atMost(1)).deleteById(fragranceNotesId);
+        verify(fragrancesRepository, times(1)).existsById(1L);
+        verify(fragranceNotesRepository, times(1)).existsById(fragranceNotesId);
+        verify(fragranceNotesRepository, times(1)).deleteById(fragranceNotesId);
     }
 
     @Test
