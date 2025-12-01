@@ -52,4 +52,10 @@ public class Fragrance {
             inverseJoinColumns = @JoinColumn(name = "note_id")
     )
     private List<Notes> notes;
+
+    @OneToMany(mappedBy = "fragrance", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reviews> reviews;
+
+    @OneToMany(mappedBy = "fragrance", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Collections> collections;
 }
