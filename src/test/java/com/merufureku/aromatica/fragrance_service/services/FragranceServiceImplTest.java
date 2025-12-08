@@ -376,9 +376,10 @@ class FragranceServiceImplTest {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        when(fragrancesRepository.findAll()).thenReturn(fragrances);
+        when(fragrancesRepository.findAllByIdNotIn(new HashSet<>())).thenReturn(fragrances);
 
-        var response = fragranceService.getFragranceNotes(baseParam);
+        var response = fragranceService.getFragranceNotes(
+                new ExcludeFragranceBatchNotesParam(new HashSet<>()), baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK.value(), response.status());
@@ -386,6 +387,6 @@ class FragranceServiceImplTest {
         assertNotNull(response.data());
         assertEquals(2, response.data().fragranceNoteLists().size());
 
-        verify(fragrancesRepository, times(1)).findAll();
+        verify(fragrancesRepository, times(1)).findAllByIdNotIn(new HashSet<>());
     }
 }

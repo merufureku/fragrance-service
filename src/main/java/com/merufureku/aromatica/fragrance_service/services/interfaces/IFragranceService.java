@@ -23,7 +23,7 @@ public interface IFragranceService {
 
     BaseResponse<FragranceNoteListResponse> getFragranceNotes(FragranceBatchNotesParam param, BaseParam baseParam);
 
-    BaseResponse<FragranceNoteListResponse> getFragranceNotes(BaseParam baseParam);
+    BaseResponse<FragranceNoteListResponse> getFragranceNotes(ExcludeFragranceBatchNotesParam param, BaseParam baseParam);
 
     boolean updateFragranceNote(Long id, InsertFragranceNoteParam param, BaseParam baseParam);
 
