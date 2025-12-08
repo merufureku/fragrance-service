@@ -347,4 +347,45 @@ class FragranceServiceImplTest {
 
         assertEquals(CustomStatusEnums.NOTE_NOT_EXIST, exception.getCustomStatusEnums());
     }
+
+    @Test
+    void testGetFragranceNotesBatch_whenIdsProvided_thenReturnFragranceNoteListResponse() {
+        var fragranceIds = Arrays.asList(1L, 2L);
+        var param = new FragranceBatchNotesParam(fragranceIds);
+
+        var fragrance1 = Fragrance.builder().id(1L).notes(new ArrayList<>()).build();
+        var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
+        var fragrances = Arrays.asList(fragrance1, fragrance2);
+
+        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(fragrances);
+
+        var response = fragranceService.getFragranceNotes(param, baseParam);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK.value(), response.status());
+        assertEquals("Get Batch Fragrance Notes Success", response.message());
+        assertNotNull(response.data());
+        assertEquals(2, response.data().fragranceNoteLists().size());
+
+        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
+    }
+
+    @Test
+    void testGetFragranceNotesBatch_whenNoIdsProvided_thenReturnAllFragranceNotes() {
+        var fragrance1 = Fragrance.builder().id(1L).notes(new ArrayList<>()).build();
+        var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
+        var fragrances = Arrays.asList(fragrance1, fragrance2);
+
+        when(fragrancesRepository.findAll()).thenReturn(fragrances);
+
+        var response = fragranceService.getFragranceNotes(baseParam);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK.value(), response.status());
+        assertEquals("Get Batch Fragrance Notes Success", response.message());
+        assertNotNull(response.data());
+        assertEquals(2, response.data().fragranceNoteLists().size());
+
+        verify(fragrancesRepository, times(1)).findAll();
+    }
 }
