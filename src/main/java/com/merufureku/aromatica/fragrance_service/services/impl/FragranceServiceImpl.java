@@ -161,10 +161,10 @@ public class FragranceServiceImpl implements IFragranceService {
     }
 
     @Override
-    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(BaseParam baseParam) {
+    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(ExcludeFragranceBatchNotesParam param, BaseParam baseParam) {
         logger.info("Fetching Fragrance Notes for all fragrances");
 
-        var fragranceToGet = fragrancesRepository.findAll();
+        var fragranceToGet = fragrancesRepository.findAllByIdNotIn(param.fragranceIds());
 
         var noteResponseList = fragranceToGet.stream()
                 .map(FragranceNoteListResponse.FragranceNoteList::new)

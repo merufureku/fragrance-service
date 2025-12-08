@@ -118,15 +118,16 @@ public class FragranceController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/internal/fragrances/full/notes")
+    @PostMapping("/internal/fragrances/full/notes")
     @Operation(summary = "Get All Fragrance and their notes")
     public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
+            @RequestBody ExcludeFragranceBatchNotesParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = fragranceService.getFragranceNotes(baseParam);
+        var response = fragranceService.getFragranceNotes(param, baseParam);
         return ResponseEntity.ok(response);
     }
 
