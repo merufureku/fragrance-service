@@ -21,6 +21,10 @@ public interface IFragranceService {
 
     BaseResponse<NoteListResponse> getFragranceNotes(Long id, Pageable pageable, BaseParam baseParam);
 
+    BaseResponse<FragranceNoteListResponse> getFragranceNotes(FragranceBatchNotesParam param, BaseParam baseParam);
+
+    BaseResponse<FragranceNoteListResponse> getFragranceNotes(BaseParam baseParam);
+
     boolean updateFragranceNote(Long id, InsertFragranceNoteParam param, BaseParam baseParam);
 
     boolean deleteFragranceNote(Long id, Long noteId, BaseParam baseParam);

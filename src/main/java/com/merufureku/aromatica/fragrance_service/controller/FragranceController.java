@@ -93,7 +93,7 @@ public class FragranceController {
 
     @GetMapping("/public/fragrances/{id}/notes")
     @Operation(summary = "Get Fragrance Notes")
-    public ResponseEntity<BaseResponse<NoteListResponse>> updateFragranceNote(
+    public ResponseEntity<BaseResponse<NoteListResponse>> getFragranceNotes(
             @PathVariable("id") long id,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId,
@@ -102,6 +102,31 @@ public class FragranceController {
         var baseParam = new BaseParam(version, correlationId);
 
         var response = fragranceService.getFragranceNotes(id, pageable, baseParam);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/public/fragrances/batch/notes")
+    @Operation(summary = "Get Fragrance Batch Notes")
+    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
+            @RequestBody FragranceBatchNotesParam param,
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        var response = fragranceService.getFragranceNotes(param, baseParam);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/internal/fragrances/full/notes")
+    @Operation(summary = "Get All Fragrance and their notes")
+    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        var response = fragranceService.getFragranceNotes(baseParam);
         return ResponseEntity.ok(response);
     }
 
