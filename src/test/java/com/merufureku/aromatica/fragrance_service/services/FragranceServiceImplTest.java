@@ -350,7 +350,7 @@ class FragranceServiceImplTest {
 
     @Test
     void testGetFragranceNotesBatch_whenIdsProvided_thenReturnFragranceNoteListResponse() {
-        var fragranceIds = Arrays.asList(1L, 2L);
+        var fragranceIds = new HashSet<>(Arrays.asList(1L, 2L));
         var param = new FragranceBatchNotesParam(fragranceIds);
 
         var fragrance1 = Fragrance.builder().id(1L).notes(new ArrayList<>()).build();
