@@ -35,7 +35,7 @@ class InternalFragranceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        baseParam = new BaseParam(1, "tester", "token");
+        baseParam = new BaseParam(1, "tester");
     }
 
     @Test
@@ -47,7 +47,6 @@ class InternalFragranceServiceImplTest {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        doNothing().when(tokenHelper).validateInternalToken(baseParam.token());
         when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(param, baseParam);
@@ -67,7 +66,6 @@ class InternalFragranceServiceImplTest {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        doNothing().when(tokenHelper).validateInternalToken(baseParam.token());
         when(fragrancesRepository.findAll()).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(
@@ -90,7 +88,6 @@ class InternalFragranceServiceImplTest {
 
         var param = new ExcludeFragranceBatchNotesParam(new HashSet<>(Arrays.asList(1L, 2L)));
 
-        doNothing().when(tokenHelper).validateInternalToken(baseParam.token());
         when(fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds())).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(param, baseParam);
