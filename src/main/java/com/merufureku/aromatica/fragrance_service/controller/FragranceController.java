@@ -31,7 +31,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "") String correlationId,
             Pageable pageable) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         var response = fragranceService.getFragrances(name, brand, gender, type,
                 country, pageable, baseParam);
 
@@ -45,7 +45,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         var response = fragranceService.getFragrance(id, baseParam);
 
         return ResponseEntity.ok(response);
@@ -58,7 +58,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         var response = fragranceService.insertFragrance(param, baseParam);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -72,7 +72,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         fragranceService.updateFragrance(id, param, baseParam);
         return ResponseEntity.noContent().build();
@@ -85,7 +85,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         fragranceService.deleteFragrance(id, baseParam);
         return ResponseEntity.noContent().build();
@@ -99,35 +99,9 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "") String correlationId,
             Pageable pageable) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         var response = fragranceService.getFragranceNotes(id, pageable, baseParam);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/public/fragrances/batch/notes")
-    @Operation(summary = "Get Fragrance Batch Notes")
-    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
-            @RequestBody FragranceBatchNotesParam param,
-            @RequestParam(required = false, defaultValue = "1") int version,
-            @RequestParam(required = false, defaultValue = "") String correlationId) {
-
-        var baseParam = new BaseParam(version, correlationId);
-
-        var response = fragranceService.getFragranceNotes(param, baseParam);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/internal/fragrances/full/notes")
-    @Operation(summary = "Get All Fragrance and their notes")
-    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
-            @RequestBody ExcludeFragranceBatchNotesParam param,
-            @RequestParam(required = false, defaultValue = "1") int version,
-            @RequestParam(required = false, defaultValue = "") String correlationId) {
-
-        var baseParam = new BaseParam(version, correlationId);
-
-        var response = fragranceService.getFragranceNotes(param, baseParam);
         return ResponseEntity.ok(response);
     }
 
@@ -139,7 +113,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         fragranceService.updateFragranceNote(id, param, baseParam);
         return ResponseEntity.noContent().build();
@@ -153,7 +127,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
 
         fragranceService.deleteFragranceNote(id, noteId, baseParam);
         return ResponseEntity.noContent().build();

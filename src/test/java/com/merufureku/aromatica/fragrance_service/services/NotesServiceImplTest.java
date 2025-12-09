@@ -50,7 +50,7 @@ public class NotesServiceImplTest {
 
     @BeforeEach
     void setUp(){
-        baseParam = new BaseParam(1, "tester");
+        baseParam = new BaseParam(1, "tester", null);
         pageable = PageRequest.of(0, 10);
 
         insertNoteParam = new InsertNoteParam(

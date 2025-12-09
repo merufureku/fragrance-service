@@ -147,34 +147,6 @@ public class FragranceServiceImpl implements IFragranceService {
     }
 
     @Override
-    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(FragranceBatchNotesParam param, BaseParam baseParam) {
-        logger.info("Fetching Fragrance Notes for the following IDs: {}", param.fragranceIds());
-
-        var fragranceToGet = fragrancesRepository.findAllById(param.fragranceIds());
-
-        var noteResponseList = fragranceToGet.stream()
-                .map(FragranceNoteListResponse.FragranceNoteList::new)
-                .toList();
-
-        return new BaseResponse<>(HttpStatus.OK.value(), "Get Batch Fragrance Notes Success",
-                new FragranceNoteListResponse(noteResponseList));
-    }
-
-    @Override
-    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(ExcludeFragranceBatchNotesParam param, BaseParam baseParam) {
-        logger.info("Fetching Fragrance Notes for all fragrances");
-
-        var fragranceToGet = fragrancesRepository.findAllByIdNotIn(param.fragranceIds());
-
-        var noteResponseList = fragranceToGet.stream()
-                .map(FragranceNoteListResponse.FragranceNoteList::new)
-                .toList();
-
-        return new BaseResponse<>(HttpStatus.OK.value(), "Get Batch Fragrance Notes Success",
-                new FragranceNoteListResponse(noteResponseList));
-    }
-
-    @Override
     public boolean updateFragranceNote(Long id, InsertFragranceNoteParam param, BaseParam baseParam) {
         logger.info("Updating Fragrance Notes for ID: {}", id);
 

@@ -9,7 +9,11 @@ public class KeyConfig {
     @Value("${jwt.access.secret.key}")
     private String jwtAccessSecretKey;
 
-    public String getJwtAccessSecretKey() {
-        return jwtAccessSecretKey;
-    }
+    @Value("${jwt.internal.fragrance.secret.key}")
+    private String jwtInternalFragranceSecretKey;
+
+
+    public String getJwtAccessSecretKey() { return jwtAccessSecretKey; }
+
+    public String getJwtInternalFragranceSecretKey() { return jwtInternalFragranceSecretKey; }
 }
