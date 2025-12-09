@@ -30,7 +30,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "") String correlationId,
             Pageable pageable) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         var response = notesService.getNotes(name, type, pageable, baseParam);
 
         return ResponseEntity.ok(response);
@@ -43,7 +43,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         var response = notesService.insertNotes(param, baseParam);
 
         return ResponseEntity.ok(response);
@@ -56,7 +56,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         var response = notesService.getNoteById(id, baseParam);
 
         return ResponseEntity.ok(response);
@@ -69,7 +69,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
-        var baseParam = new BaseParam(version, correlationId);
+        var baseParam = new BaseParam(version, correlationId, null);
         notesService.deleteNoteById(id, baseParam);
 
         return ResponseEntity.noContent().build();
