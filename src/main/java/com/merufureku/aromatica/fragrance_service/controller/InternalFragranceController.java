@@ -1,9 +1,10 @@
 package com.merufureku.aromatica.fragrance_service.controller;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.ExcludeFragranceBatchNotesParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.FragranceBatchNotesParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.ExcludeFragranceBatchParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.GetFragranceBatchParam;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
+import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceNoteListResponse;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.IInternalFragranceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,10 +20,23 @@ public class InternalFragranceController {
         this.internalFragranceService = internalFragranceService;
     }
 
+    @PostMapping("/internal/fragrances/batch/full")
+    @Operation(summary = "Get Selected Fragrance Batch Notes")
+    public ResponseEntity<BaseResponse<FragranceDetailedListResponse>> getFragranceBatch(
+            @RequestBody GetFragranceBatchParam param,
+            @RequestParam(required = false, defaultValue = "1") int version,
+            @RequestParam(required = false, defaultValue = "") String correlationId) {
+
+        var baseParam = new BaseParam(version, correlationId);
+
+        var response = internalFragranceService.getFragrance(param, baseParam);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/internal/fragrances/batch/notes")
     @Operation(summary = "Get Selected Fragrance Batch Notes")
     public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
-            @RequestBody FragranceBatchNotesParam param,
+            @RequestBody GetFragranceBatchParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
@@ -35,7 +49,7 @@ public class InternalFragranceController {
     @PostMapping("/internal/fragrances/exclude/notes")
     @Operation(summary = "Get Filtered Fragrance Batch Notes")
     public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
-            @RequestBody(required = false) ExcludeFragranceBatchNotesParam param,
+            @RequestBody(required = false) ExcludeFragranceBatchParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
