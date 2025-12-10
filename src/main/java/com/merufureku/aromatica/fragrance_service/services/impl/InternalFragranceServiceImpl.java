@@ -3,9 +3,10 @@ package com.merufureku.aromatica.fragrance_service.services.impl;
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 import com.merufureku.aromatica.fragrance_service.dao.repository.FragrancesRepository;
 import com.merufureku.aromatica.fragrance_service.dto.params.BaseParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.ExcludeFragranceBatchNotesParam;
-import com.merufureku.aromatica.fragrance_service.dto.params.FragranceBatchNotesParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.ExcludeFragranceBatchParam;
+import com.merufureku.aromatica.fragrance_service.dto.params.GetFragranceBatchParam;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
+import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceNoteListResponse;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.IInternalFragranceService;
 import org.apache.logging.log4j.LogManager;
@@ -28,12 +29,26 @@ public class InternalFragranceServiceImpl implements IInternalFragranceService {
     }
 
     @Override
-    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(FragranceBatchNotesParam param, BaseParam baseParam) {
+    public BaseResponse<FragranceDetailedListResponse> getFragrance(GetFragranceBatchParam param, BaseParam baseParam) {
+        logger.info("Fetching Fragrance Details for the following IDs: {}", param.fragranceIds());
+
+        var fragrance = fragrancesRepository.findAllById(param.fragranceIds());
+
+        var fragranceResponseList = fragrance.stream()
+                .map(FragranceDetailedListResponse.FragranceDetailedResponse::new)
+                .toList();
+
+        return new BaseResponse<>(HttpStatus.OK.value(), "Get Batch Fragrance Metadata Success",
+                new FragranceDetailedListResponse(fragranceResponseList));
+    }
+
+    @Override
+    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(GetFragranceBatchParam param, BaseParam baseParam) {
         logger.info("Fetching Fragrance Notes for the following IDs: {}", param.fragranceIds());
 
-        var fragranceToGet = fragrancesRepository.findAllById(param.fragranceIds());
+        var fragrances = fragrancesRepository.findAllById(param.fragranceIds());
 
-        var noteResponseList = fragranceToGet.stream()
+        var noteResponseList = fragrances.stream()
                 .map(FragranceNoteListResponse.FragranceNoteList::new)
                 .toList();
 
@@ -42,20 +57,20 @@ public class InternalFragranceServiceImpl implements IInternalFragranceService {
     }
 
     @Override
-    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(ExcludeFragranceBatchNotesParam param, BaseParam baseParam) {
+    public BaseResponse<FragranceNoteListResponse> getFragranceNotes(ExcludeFragranceBatchParam param, BaseParam baseParam) {
 
         logger.info("Fetching Fragrance Notes for all fragrances");
 
-        List<Fragrance> fragranceToGet;
+        List<Fragrance> fragrances;
 
         if (param == null || param.excludedFragranceIds().isEmpty()) {
-            fragranceToGet = fragrancesRepository.findAll();
+            fragrances = fragrancesRepository.findAll();
         }
         else{
-            fragranceToGet = fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds());
+            fragrances = fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds());
         }
 
-        var noteResponseList = fragranceToGet.stream()
+        var noteResponseList = fragrances.stream()
                 .map(FragranceNoteListResponse.FragranceNoteList::new)
                 .toList();
 

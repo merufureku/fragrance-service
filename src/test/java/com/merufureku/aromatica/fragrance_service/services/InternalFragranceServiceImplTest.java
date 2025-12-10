@@ -3,7 +3,6 @@ package com.merufureku.aromatica.fragrance_service.services;
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 import com.merufureku.aromatica.fragrance_service.dao.repository.FragrancesRepository;
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
-import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import com.merufureku.aromatica.fragrance_service.helper.TokenHelper;
 import com.merufureku.aromatica.fragrance_service.services.impl.InternalFragranceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,7 @@ class InternalFragranceServiceImplTest {
     @Test
     void testGetFragranceNotesBatch_whenIdsProvided_thenReturnFragranceNoteListResponse() {
         var fragranceIds = new HashSet<>(Arrays.asList(1L, 2L));
-        var param = new FragranceBatchNotesParam(fragranceIds);
+        var param = new GetFragranceBatchParam(fragranceIds);
 
         var fragrance1 = Fragrance.builder().id(1L).notes(new ArrayList<>()).build();
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
@@ -69,7 +68,7 @@ class InternalFragranceServiceImplTest {
         when(fragrancesRepository.findAll()).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(
-                new ExcludeFragranceBatchNotesParam(new HashSet<>()), baseParam);
+                new ExcludeFragranceBatchParam(new HashSet<>()), baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK.value(), response.status());
@@ -86,7 +85,7 @@ class InternalFragranceServiceImplTest {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        var param = new ExcludeFragranceBatchNotesParam(new HashSet<>(Arrays.asList(1L, 2L)));
+        var param = new ExcludeFragranceBatchParam(new HashSet<>(Arrays.asList(1L, 2L)));
 
         when(fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds())).thenReturn(fragrances);
 
@@ -99,5 +98,65 @@ class InternalFragranceServiceImplTest {
         assertEquals(2, response.data().fragranceNoteLists().size());
 
         verify(fragrancesRepository, times(1)).findAllByIdNotIn(new HashSet<>(Arrays.asList(1L, 2L)));
+    }
+
+    @Test
+    void testGetFragranceBatch_whenIdsProvided_thenReturnFragranceDetailedListResponse() {
+        var fragranceIds = new HashSet<>(Arrays.asList(1L, 2L));
+        var param = new GetFragranceBatchParam(fragranceIds);
+
+        var fragrance1 = Fragrance.builder()
+                .id(1L)
+                .name("Fragrance One")
+                .brand("Brand A")
+                .description("Description One")
+                .notes(new ArrayList<>())
+                .build();
+
+        var fragrance2 = Fragrance.builder()
+                .id(2L)
+                .name("Fragrance Two")
+                .brand("Brand B")
+                .description("Description Two")
+                .notes(new ArrayList<>())
+                .build();
+
+        var fragrances = Arrays.asList(fragrance1, fragrance2);
+
+        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(fragrances);
+
+        var response = internalFragranceService.getFragrance(param, baseParam);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK.value(), response.status());
+        assertEquals("Get Batch Fragrance Metadata Success", response.message());
+        assertNotNull(response.data());
+        assertEquals(2, response.data().fragrances().size());
+
+        var firstResponse = response.data().fragrances().get(0);
+        assertEquals(fragrance1.getId(), firstResponse.fragranceId());
+        assertEquals(fragrance1.getName(), firstResponse.name());
+        assertEquals(fragrance1.getBrand(), firstResponse.brand());
+        assertEquals(fragrance1.getDescription(), firstResponse.description());
+
+        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
+    }
+
+    @Test
+    void testGetFragranceBatch_whenRepositoryReturnsEmpty_thenReturnEmptyList() {
+        var fragranceIds = new HashSet<>(Collections.singletonList(1L));
+        var param = new GetFragranceBatchParam(fragranceIds);
+
+        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(Collections.emptyList());
+
+        var response = internalFragranceService.getFragrance(param, baseParam);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK.value(), response.status());
+        assertEquals("Get Batch Fragrance Metadata Success", response.message());
+        assertNotNull(response.data());
+        assertTrue(response.data().fragrances().isEmpty());
+
+        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
     }
 }
