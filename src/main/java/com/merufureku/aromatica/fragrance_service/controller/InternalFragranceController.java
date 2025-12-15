@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("internal/fragrances")
 public class InternalFragranceController {
 
     private final IInternalFragranceService internalFragranceService;
@@ -20,7 +21,7 @@ public class InternalFragranceController {
         this.internalFragranceService = internalFragranceService;
     }
 
-    @PostMapping("/internal/fragrances/batch/full")
+    @PostMapping("/batch/full")
     @Operation(summary = "Get Selected Fragrance Batch Notes")
     public ResponseEntity<BaseResponse<FragranceDetailedListResponse>> getFragranceBatch(
             @RequestBody GetFragranceBatchParam param,
@@ -33,7 +34,7 @@ public class InternalFragranceController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/internal/fragrances/batch/notes")
+    @PostMapping("/batch/notes")
     @Operation(summary = "Get Selected Fragrance Batch Notes")
     public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
             @RequestBody GetFragranceBatchParam param,
@@ -46,7 +47,7 @@ public class InternalFragranceController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/internal/fragrances/exclude/notes")
+    @PostMapping("/exclude/notes")
     @Operation(summary = "Get Filtered Fragrance Batch Notes")
     public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
             @RequestBody(required = false) ExcludeFragranceBatchParam param,
