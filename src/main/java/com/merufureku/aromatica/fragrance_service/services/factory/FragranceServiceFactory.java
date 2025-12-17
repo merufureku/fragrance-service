@@ -20,7 +20,7 @@ public class FragranceServiceFactory {
         return switch (version) {
             case 0 -> fragranceServiceImpl0;
             case 1 -> fragranceServiceImpl1;
-            default -> throw new IllegalArgumentException("Unsupported recommendation service version: " + version);
+            default -> throw new IllegalArgumentException("Unsupported service version: " + version);
         };
     }
 }
