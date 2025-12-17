@@ -24,14 +24,14 @@ import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class NotesServiceImpl implements INotesService {
+public class NotesServiceImpl1 implements INotesService {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     private final NotesRepository notesRepository;
     private final SpecificationHelper specificationHelper;
 
-    public NotesServiceImpl(NotesRepository notesRepository, SpecificationHelper specificationHelper) {
+    public NotesServiceImpl1(NotesRepository notesRepository, SpecificationHelper specificationHelper) {
         this.notesRepository = notesRepository;
         this.specificationHelper = specificationHelper;
     }

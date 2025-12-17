@@ -5,6 +5,7 @@ import com.merufureku.aromatica.fragrance_service.dto.params.InsertNoteParam;
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.NoteListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.NoteResponse;
+import com.merufureku.aromatica.fragrance_service.services.factory.NotesServiceFactory;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.INotesService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class NotesController {
 
-    private final INotesService notesService;
+    private final NotesServiceFactory notesServiceFactory;
 
-    public NotesController(INotesService notesService) {
-        this.notesService = notesService;
+    public NotesController(NotesServiceFactory notesServiceFactory) {
+        this.notesServiceFactory = notesServiceFactory;
     }
 
     @GetMapping("/public/notes")
@@ -31,7 +32,7 @@ public class NotesController {
             Pageable pageable) {
 
         var baseParam = new BaseParam(version, correlationId);
-        var response = notesService.getNotes(name, type, pageable, baseParam);
+        var response = notesServiceFactory.getService(version).getNotes(name, type, pageable, baseParam);
 
         return ResponseEntity.ok(response);
     }
@@ -44,7 +45,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
         var baseParam = new BaseParam(version, correlationId);
-        var response = notesService.insertNotes(param, baseParam);
+        var response = notesServiceFactory.getService(version).insertNotes(param, baseParam);
 
         return ResponseEntity.ok(response);
     }
@@ -57,7 +58,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
         var baseParam = new BaseParam(version, correlationId);
-        var response = notesService.getNoteById(id, baseParam);
+        var response = notesServiceFactory.getService(version).getNoteById(id, baseParam);
 
         return ResponseEntity.ok(response);
     }
@@ -70,7 +71,7 @@ public class NotesController {
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
         var baseParam = new BaseParam(version, correlationId);
-        notesService.deleteNoteById(id, baseParam);
+        notesServiceFactory.getService(version).deleteNoteById(id, baseParam);
 
         return ResponseEntity.noContent().build();
     }

@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class InternalFragranceServiceImpl implements IInternalFragranceService {
+public class InternalFragranceServiceImpl1 implements IInternalFragranceService {
 
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     private final FragrancesRepository fragrancesRepository;
 
-    public InternalFragranceServiceImpl(FragrancesRepository fragrancesRepository) {
+    public InternalFragranceServiceImpl1(FragrancesRepository fragrancesRepository) {
         this.fragrancesRepository = fragrancesRepository;
     }
 

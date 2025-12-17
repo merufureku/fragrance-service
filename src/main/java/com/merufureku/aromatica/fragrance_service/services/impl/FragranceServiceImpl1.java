@@ -25,7 +25,7 @@ import static com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class FragranceServiceImpl implements IFragranceService {
+public class FragranceServiceImpl1 implements IFragranceService {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
@@ -35,8 +35,8 @@ public class FragranceServiceImpl implements IFragranceService {
     private final FragranceHelper fragranceHelper;
     private final SpecificationHelper specificationHelper;
 
-    public FragranceServiceImpl(FragrancesRepository fragrancesRepository, FragranceNotesRepository fragranceNotesRepository, NotesRepository notesRepository, FragranceHelper fragranceHelper,
-                                SpecificationHelper specificationHelper) {
+    public FragranceServiceImpl1(FragrancesRepository fragrancesRepository, FragranceNotesRepository fragranceNotesRepository, NotesRepository notesRepository, FragranceHelper fragranceHelper,
+                                 SpecificationHelper specificationHelper) {
         this.fragrancesRepository = fragrancesRepository;
         this.fragranceNotesRepository = fragranceNotesRepository;
         this.notesRepository = notesRepository;

@@ -9,6 +9,6 @@ public record InsertFragranceParam(
         @NotBlank(message = "Fragrance type cannot be null") String type,
         @NotBlank(message = "Fragrance origin cannot be null") String countryOfOrigin,
         @NotBlank(message = "Fragrance gender cannot be null") String gender,
-        @NotBlank(message = "Fragrance release year cannot be null") Integer releaseYear,
+        Integer releaseYear,
         String text
 ) {}

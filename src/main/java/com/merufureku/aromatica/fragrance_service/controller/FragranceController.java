@@ -2,6 +2,7 @@ package com.merufureku.aromatica.fragrance_service.controller;
 
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.*;
+import com.merufureku.aromatica.fragrance_service.services.factory.FragranceServiceFactory;
 import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -13,11 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class FragranceController {
 
-    private final IFragranceService fragranceService;
-
-    public FragranceController(IFragranceService fragranceService) {
-        this.fragranceService = fragranceService;
-    }
+    private FragranceServiceFactory fragranceServiceFactory;
 
     @GetMapping("/public/fragrances")
     @Operation(summary = "Get list of fragrances")
@@ -32,8 +29,8 @@ public class FragranceController {
             Pageable pageable) {
 
         var baseParam = new BaseParam(version, correlationId);
-        var response = fragranceService.getFragrances(name, brand, gender, type,
-                country, pageable, baseParam);
+        var response = fragranceServiceFactory.getService(version)
+                .getFragrances(name, brand, gender, type, country, pageable, baseParam);
 
         return ResponseEntity.ok(response);
     }
@@ -46,7 +43,7 @@ public class FragranceController {
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
         var baseParam = new BaseParam(version, correlationId);
-        var response = fragranceService.getFragrance(id, baseParam);
+        var response = fragranceServiceFactory.getService(version).getFragrance(id, baseParam);
 
         return ResponseEntity.ok(response);
     }
@@ -60,7 +57,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = fragranceService.insertFragrance(param, baseParam);
+        var response = fragranceServiceFactory.getService(version).insertFragrance(param, baseParam);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -74,7 +71,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        fragranceService.updateFragrance(id, param, baseParam);
+        fragranceServiceFactory.getService(version).updateFragrance(id, param, baseParam);
         return ResponseEntity.noContent().build();
     }
 
@@ -87,7 +84,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        fragranceService.deleteFragrance(id, baseParam);
+        fragranceServiceFactory.getService(version).deleteFragrance(id, baseParam);
         return ResponseEntity.noContent().build();
     }
 
@@ -101,7 +98,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = fragranceService.getFragranceNotes(id, pageable, baseParam);
+        var response = fragranceServiceFactory.getService(version).getFragranceNotes(id, pageable, baseParam);
         return ResponseEntity.ok(response);
     }
 
@@ -115,7 +112,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        fragranceService.updateFragranceNote(id, param, baseParam);
+        fragranceServiceFactory.getService(version).updateFragranceNote(id, param, baseParam);
         return ResponseEntity.noContent().build();
     }
 
@@ -129,7 +126,7 @@ public class FragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        fragranceService.deleteFragranceNote(id, noteId, baseParam);
+        fragranceServiceFactory.getService(version).deleteFragranceNote(id, noteId, baseParam);
         return ResponseEntity.noContent().build();
     }
 }
