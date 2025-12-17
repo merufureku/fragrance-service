@@ -21,7 +21,7 @@ public class NotesServiceFactory {
         return switch (version) {
             case 0 -> notesServiceImpl0;
             case 1 -> notesServiceImpl1;
-            default -> throw new IllegalArgumentException("Unsupported recommendation service version: " + version);
+            default -> throw new IllegalArgumentException("Unsupported service version: " + version);
         };
     }
 }

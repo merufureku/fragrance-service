@@ -21,7 +21,7 @@ public class InternalFragranceServiceFactory {
         return switch (version) {
             case 0 -> internalFragranceServiceImpl0;
             case 1 -> internalFragranceServiceImpl1;
-            default -> throw new IllegalArgumentException("Unsupported recommendation service version: " + version);
+            default -> throw new IllegalArgumentException("Unsupported service version: " + version);
         };
     }
 }
