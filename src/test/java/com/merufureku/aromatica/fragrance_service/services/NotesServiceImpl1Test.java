@@ -10,7 +10,7 @@ import com.merufureku.aromatica.fragrance_service.dto.responses.NoteResponse;
 import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.services.impl.NotesServiceImpl;
+import com.merufureku.aromatica.fragrance_service.services.impl.NotesServiceImpl1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +32,10 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class NotesServiceImplTest {
+public class NotesServiceImpl1Test {
 
     @InjectMocks
-    private NotesServiceImpl notesServiceImpl;
+    private NotesServiceImpl1 notesServiceImpl1;
 
     @Mock
     private NotesRepository notesRepository;
@@ -76,7 +76,7 @@ public class NotesServiceImplTest {
         when(notesRepository.findAll(any(Specification.class), eq(pageable)))
                 .thenReturn(notePage);
 
-        BaseResponse<NoteListResponse> response = notesServiceImpl
+        BaseResponse<NoteListResponse> response = notesServiceImpl1
                 .getNotes("Vanilla", "base", pageable, baseParam);
 
         assertNotNull(response);
@@ -91,7 +91,7 @@ public class NotesServiceImplTest {
     void testInsertNotes_thenReturnSuccess(){
         when(notesRepository.existsByName("Lavender")).thenReturn(false);
 
-        BaseResponse<Void> response = notesServiceImpl
+        BaseResponse<Void> response = notesServiceImpl1
                 .insertNotes(insertNoteParam, baseParam);
 
         assertNotNull(response);
@@ -105,7 +105,7 @@ public class NotesServiceImplTest {
         insertNoteParam = null;
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.insertNotes(insertNoteParam, baseParam));
+                notesServiceImpl1.insertNotes(insertNoteParam, baseParam));
 
         assertEquals(CustomStatusEnums.NO_NOTES_TO_INSERT, exception.getCustomStatusEnums());
         verify(notesRepository, never()).saveAll(anyList());
@@ -116,7 +116,7 @@ public class NotesServiceImplTest {
         insertNoteParam = new InsertNoteParam(null);
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.insertNotes(insertNoteParam, baseParam));
+                notesServiceImpl1.insertNotes(insertNoteParam, baseParam));
 
         assertEquals(CustomStatusEnums.NO_NOTES_TO_INSERT, exception.getCustomStatusEnums());
         verify(notesRepository, never()).saveAll(anyList());
@@ -127,7 +127,7 @@ public class NotesServiceImplTest {
         insertNoteParam = new InsertNoteParam(new HashSet<>());
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.insertNotes(insertNoteParam, baseParam));
+                notesServiceImpl1.insertNotes(insertNoteParam, baseParam));
 
         assertEquals(CustomStatusEnums.NO_NOTES_TO_INSERT, exception.getCustomStatusEnums());
         verify(notesRepository, never()).saveAll(anyList());
@@ -138,7 +138,7 @@ public class NotesServiceImplTest {
         when(notesRepository.existsByName("Lavender")).thenReturn(true);
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.insertNotes(insertNoteParam, baseParam));
+                notesServiceImpl1.insertNotes(insertNoteParam, baseParam));
 
         assertEquals(CustomStatusEnums.NOTE_ALREADY_EXIST, exception.getCustomStatusEnums());
         verify(notesRepository, never()).saveAll(anyList());
@@ -148,7 +148,7 @@ public class NotesServiceImplTest {
     void testGetNoteById_thenReturnNote() {
         when(notesRepository.findById(1L)).thenReturn(Optional.ofNullable(note));
 
-        BaseResponse<NoteResponse> response = notesServiceImpl.getNoteById(1L, baseParam);
+        BaseResponse<NoteResponse> response = notesServiceImpl1.getNoteById(1L, baseParam);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK.value(), response.status());
@@ -162,7 +162,7 @@ public class NotesServiceImplTest {
         when(notesRepository.findById(1L)).thenReturn(Optional.empty());
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.getNoteById(1L, baseParam));
+                notesServiceImpl1.getNoteById(1L, baseParam));
 
         assertEquals(CustomStatusEnums.NOTE_NOT_EXIST, exception.getCustomStatusEnums());
         verify(notesRepository, times(1)).findById(1L);
@@ -172,7 +172,7 @@ public class NotesServiceImplTest {
     void testDeleteNoteById_thenReturnSuccess() {
         when(notesRepository.existsById(1L)).thenReturn(true);
 
-        boolean result = notesServiceImpl.deleteNoteById(1L, baseParam);
+        boolean result = notesServiceImpl1.deleteNoteById(1L, baseParam);
 
         assertTrue(result);
         verify(notesRepository, times(1)).existsById(1L);
@@ -184,7 +184,7 @@ public class NotesServiceImplTest {
         when(notesRepository.existsById(1L)).thenReturn(false);
 
         ServiceException exception = assertThrows(ServiceException.class, () ->
-                notesServiceImpl.deleteNoteById(1L, baseParam));
+                notesServiceImpl1.deleteNoteById(1L, baseParam));
 
         assertEquals(CustomStatusEnums.NOTE_NOT_EXIST, exception.getCustomStatusEnums());
         verify(notesRepository, times(1)).existsById(1L);

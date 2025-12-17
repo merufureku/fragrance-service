@@ -12,7 +12,7 @@ import com.merufureku.aromatica.fragrance_service.enums.CustomStatusEnums;
 import com.merufureku.aromatica.fragrance_service.exceptions.ServiceException;
 import com.merufureku.aromatica.fragrance_service.helper.FragranceHelper;
 import com.merufureku.aromatica.fragrance_service.helper.SpecificationHelper;
-import com.merufureku.aromatica.fragrance_service.services.impl.FragranceServiceImpl;
+import com.merufureku.aromatica.fragrance_service.services.impl.FragranceServiceImpl1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,10 +33,10 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FragranceServiceImplTest {
+class FragranceServiceImpl1Test {
 
     @InjectMocks
-    private FragranceServiceImpl fragranceService;
+    private FragranceServiceImpl1 fragranceService;
 
     @Mock
     private FragrancesRepository fragrancesRepository;

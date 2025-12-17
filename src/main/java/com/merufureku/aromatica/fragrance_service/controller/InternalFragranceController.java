@@ -6,7 +6,7 @@ import com.merufureku.aromatica.fragrance_service.dto.params.GetFragranceBatchPa
 import com.merufureku.aromatica.fragrance_service.dto.responses.BaseResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceDetailedListResponse;
 import com.merufureku.aromatica.fragrance_service.dto.responses.FragranceNoteListResponse;
-import com.merufureku.aromatica.fragrance_service.services.interfaces.IInternalFragranceService;
+import com.merufureku.aromatica.fragrance_service.services.factory.InternalFragranceServiceFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("internal/fragrances")
 public class InternalFragranceController {
 
-    private final IInternalFragranceService internalFragranceService;
+    private final InternalFragranceServiceFactory internalFragranceServiceFactory;
 
-    public InternalFragranceController(IInternalFragranceService internalFragranceService) {
-        this.internalFragranceService = internalFragranceService;
+    public InternalFragranceController(InternalFragranceServiceFactory internalFragranceServiceFactory) {
+        this.internalFragranceServiceFactory = internalFragranceServiceFactory;
     }
 
     @PostMapping("/batch/full")
@@ -30,7 +30,7 @@ public class InternalFragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = internalFragranceService.getFragrance(param, baseParam);
+        var response = internalFragranceServiceFactory.getService(version).getFragrance(param, baseParam);
         return ResponseEntity.ok(response);
     }
 
@@ -43,7 +43,7 @@ public class InternalFragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = internalFragranceService.getFragranceNotes(param, baseParam);
+        var response = internalFragranceServiceFactory.getService(version).getFragranceNotes(param, baseParam);
         return ResponseEntity.ok(response);
     }
 
@@ -56,7 +56,7 @@ public class InternalFragranceController {
 
         var baseParam = new BaseParam(version, correlationId);
 
-        var response = internalFragranceService.getFragranceNotes(param, baseParam);
+        var response = internalFragranceServiceFactory.getService(version).getFragranceNotes(param, baseParam);
         return ResponseEntity.ok(response);
     }
 }

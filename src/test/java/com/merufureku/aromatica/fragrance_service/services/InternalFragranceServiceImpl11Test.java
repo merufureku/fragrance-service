@@ -4,7 +4,7 @@ import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 import com.merufureku.aromatica.fragrance_service.dao.repository.FragrancesRepository;
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.helper.TokenHelper;
-import com.merufureku.aromatica.fragrance_service.services.impl.InternalFragranceServiceImpl;
+import com.merufureku.aromatica.fragrance_service.services.impl.InternalFragranceServiceImpl1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class InternalFragranceServiceImplTest {
+class InternalFragranceServiceImpl11Test {
 
     @InjectMocks
-    private InternalFragranceServiceImpl internalFragranceService;
+    private InternalFragranceServiceImpl1 internalFragranceService;
 
     @Mock
     private FragrancesRepository fragrancesRepository;
