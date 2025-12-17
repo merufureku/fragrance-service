@@ -22,7 +22,7 @@ public class InternalFragranceController {
     }
 
     @PostMapping("/batch/full")
-    @Operation(summary = "Get Selected Fragrance Batch Notes")
+    @Operation(summary = "Get Selected Fragrance Batch Details")
     public ResponseEntity<BaseResponse<FragranceDetailedListResponse>> getFragranceBatch(
             @RequestBody GetFragranceBatchParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
@@ -36,7 +36,7 @@ public class InternalFragranceController {
 
     @PostMapping("/batch/notes")
     @Operation(summary = "Get Selected Fragrance Batch Notes")
-    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
+    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFilteredFragranceNotes(
             @RequestBody GetFragranceBatchParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
@@ -49,7 +49,7 @@ public class InternalFragranceController {
 
     @PostMapping("/exclude/notes")
     @Operation(summary = "Get Filtered Fragrance Batch Notes")
-    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceBatchNotes(
+    public ResponseEntity<BaseResponse<FragranceNoteListResponse>> getFragranceNotesExcluding(
             @RequestBody(required = false) ExcludeFragranceBatchParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {

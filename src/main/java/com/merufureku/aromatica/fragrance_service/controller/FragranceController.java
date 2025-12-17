@@ -54,7 +54,7 @@ public class FragranceController {
     @PostMapping("/fragrances")
     @Operation(summary = "Insert Fragrance")
     public ResponseEntity<BaseResponse<InsertFragranceResponse>> createFragrance(
-            @RequestBody InsertFragranceParam param,
+            @Valid @RequestBody InsertFragranceParam param,
             @RequestParam(required = false, defaultValue = "1") int version,
             @RequestParam(required = false, defaultValue = "") String correlationId) {
 
