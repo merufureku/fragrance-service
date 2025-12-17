@@ -3,7 +3,6 @@ package com.merufureku.aromatica.fragrance_service.controller;
 import com.merufureku.aromatica.fragrance_service.dto.params.*;
 import com.merufureku.aromatica.fragrance_service.dto.responses.*;
 import com.merufureku.aromatica.fragrance_service.services.factory.FragranceServiceFactory;
-import com.merufureku.aromatica.fragrance_service.services.interfaces.IFragranceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class FragranceController {
 
-    private FragranceServiceFactory fragranceServiceFactory;
+    private final FragranceServiceFactory fragranceServiceFactory;
+
+    public FragranceController(FragranceServiceFactory fragranceServiceFactory) {
+        this.fragranceServiceFactory = fragranceServiceFactory;
+    }
 
     @GetMapping("/public/fragrances")
     @Operation(summary = "Get list of fragrances")
