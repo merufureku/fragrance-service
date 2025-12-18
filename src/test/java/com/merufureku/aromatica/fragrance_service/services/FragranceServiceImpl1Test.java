@@ -71,7 +71,7 @@ class FragranceServiceImpl1Test {
                 .countryOfOrigin("France")
                 .gender("Unisex")
                 .releaseYear(2023)
-                .imageUrl("http://test.com/image.jpg")
+                .imageUrl("https://test.com/image.jpg")
                 .notes(new ArrayList<>())
                 .build();
     }
@@ -100,7 +100,7 @@ class FragranceServiceImpl1Test {
 
     @Test
     void testGetFragrance_whenExists_thenReturnFragranceDetail() {
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(fragrance));
+        when(fragrancesRepository.findByIdWithNotes(1L)).thenReturn(Optional.of(fragrance));
 
         BaseResponse<FragranceDetailedResponse> response = fragranceService.getFragrance(1L, baseParam);
 
@@ -109,25 +109,25 @@ class FragranceServiceImpl1Test {
         assertEquals("Get Fragrance Detail Success", response.message());
         assertNotNull(response.data());
 
-        verify(fragrancesRepository, times(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findByIdWithNotes(1L);
     }
 
     @Test
     void testGetFragrance_whenNotExists_thenThrowException() {
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.empty());
+        when(fragrancesRepository.findByIdWithNotes(1L)).thenReturn(Optional.empty());
 
         ServiceException exception = assertThrows(ServiceException.class,
                 () -> fragranceService.getFragrance(1L, baseParam));
 
         assertEquals(CustomStatusEnums.FRAGRANCE_NOT_FOUND, exception.getCustomStatusEnums());
-        verify(fragrancesRepository, times(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findByIdWithNotes(1L);
     }
 
     @Test
     void testInsertFragrance_whenValid_thenInsertSuccessfully() {
         var param = new InsertFragranceParam(
                 "New Fragrance", "New Brand", "Description", "Parfum",
-                "Italy", "Male", 2024, "http://test.com/new.jpg");
+                "Italy", "Male", 2024, "https://test.com/new.jpg");
 
         when(fragrancesRepository.existsByNameAndBrand(param.name(), param.brand()))
                 .thenReturn(false);
@@ -234,7 +234,7 @@ class FragranceServiceImpl1Test {
         var notes = new ArrayList<Notes>();
         fragrance.setNotes(notes);
 
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.of(fragrance));
+        when(fragrancesRepository.findByIdWithNotes(1L)).thenReturn(Optional.of(fragrance));
 
         BaseResponse<NoteListResponse> response = fragranceService.getFragranceNotes(1L, pageable, baseParam);
 
@@ -242,12 +242,12 @@ class FragranceServiceImpl1Test {
         assertEquals(HttpStatus.OK.value(), response.status());
         assertEquals("Get Fragrance Notes Success", response.message());
 
-        verify(fragrancesRepository, times(1)).findById(1L);
+        verify(fragrancesRepository, times(1)).findByIdWithNotes(1L);
     }
 
     @Test
     void testGetFragranceNotes_whenFragranceNotExists_thenThrowException() {
-        when(fragrancesRepository.findById(1L)).thenReturn(Optional.empty());
+        when(fragrancesRepository.findByIdWithNotes(1L)).thenReturn(Optional.empty());
 
         ServiceException exception = assertThrows(ServiceException.class,
                 () -> fragranceService.getFragranceNotes(1L, pageable, baseParam));

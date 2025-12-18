@@ -32,7 +32,7 @@ public class InternalFragranceServiceImpl1 implements IInternalFragranceService 
     public BaseResponse<FragranceDetailedListResponse> getFragrance(GetFragranceBatchParam param, BaseParam baseParam) {
         logger.info("Fetching Fragrance Details for the following IDs: {}", param.fragranceIds());
 
-        var fragrance = fragrancesRepository.findAllById(param.fragranceIds());
+        var fragrance = fragrancesRepository.findAllByIdWithNotes(param.fragranceIds());
 
         var fragranceResponseList = fragrance.stream()
                 .map(FragranceDetailedListResponse.FragranceDetailedResponse::new)
@@ -46,7 +46,7 @@ public class InternalFragranceServiceImpl1 implements IInternalFragranceService 
     public BaseResponse<FragranceNoteListResponse> getFragranceNotes(GetFragranceBatchParam param, BaseParam baseParam) {
         logger.info("Fetching Fragrance Notes for the following IDs: {}", param.fragranceIds());
 
-        var fragrances = fragrancesRepository.findAllById(param.fragranceIds());
+        var fragrances = fragrancesRepository.findAllByIdWithNotes(param.fragranceIds());
 
         var noteResponseList = fragrances.stream()
                 .map(FragranceNoteListResponse.FragranceNoteList::new)
@@ -64,10 +64,10 @@ public class InternalFragranceServiceImpl1 implements IInternalFragranceService 
         List<Fragrance> fragrances;
 
         if (param == null || param.excludedFragranceIds().isEmpty()) {
-            fragrances = fragrancesRepository.findAll();
+            fragrances = fragrancesRepository.findAllWithNotes();
         }
         else{
-            fragrances = fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds());
+            fragrances = fragrancesRepository.findAllByIdNotInWithNotes(param.excludedFragranceIds());
         }
 
         var noteResponseList = fragrances.stream()
