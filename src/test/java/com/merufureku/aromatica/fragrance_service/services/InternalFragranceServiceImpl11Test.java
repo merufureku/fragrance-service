@@ -46,7 +46,7 @@ class InternalFragranceServiceImpl11Test {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(fragrances);
+        when(fragrancesRepository.findAllByIdWithNotes(fragranceIds)).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(param, baseParam);
 
@@ -56,7 +56,7 @@ class InternalFragranceServiceImpl11Test {
         assertNotNull(response.data());
         assertEquals(2, response.data().fragranceNoteLists().size());
 
-        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
+        verify(fragrancesRepository, times(1)).findAllByIdWithNotes(fragranceIds);
     }
 
     @Test
@@ -65,7 +65,7 @@ class InternalFragranceServiceImpl11Test {
         var fragrance2 = Fragrance.builder().id(2L).notes(new ArrayList<>()).build();
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        when(fragrancesRepository.findAll()).thenReturn(fragrances);
+        when(fragrancesRepository.findAllWithNotes()).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(
                 new ExcludeFragranceBatchParam(new HashSet<>()), baseParam);
@@ -76,7 +76,7 @@ class InternalFragranceServiceImpl11Test {
         assertNotNull(response.data());
         assertEquals(2, response.data().fragranceNoteLists().size());
 
-        verify(fragrancesRepository, times(1)).findAll();
+        verify(fragrancesRepository, times(1)).findAllWithNotes();
     }
 
     @Test
@@ -87,7 +87,7 @@ class InternalFragranceServiceImpl11Test {
 
         var param = new ExcludeFragranceBatchParam(new HashSet<>(Arrays.asList(1L, 2L)));
 
-        when(fragrancesRepository.findAllByIdNotIn(param.excludedFragranceIds())).thenReturn(fragrances);
+        when(fragrancesRepository.findAllByIdNotInWithNotes(param.excludedFragranceIds())).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragranceNotes(param, baseParam);
 
@@ -97,7 +97,7 @@ class InternalFragranceServiceImpl11Test {
         assertNotNull(response.data());
         assertEquals(2, response.data().fragranceNoteLists().size());
 
-        verify(fragrancesRepository, times(1)).findAllByIdNotIn(new HashSet<>(Arrays.asList(1L, 2L)));
+        verify(fragrancesRepository, times(1)).findAllByIdNotInWithNotes(new HashSet<>(Arrays.asList(1L, 2L)));
     }
 
     @Test
@@ -123,7 +123,7 @@ class InternalFragranceServiceImpl11Test {
 
         var fragrances = Arrays.asList(fragrance1, fragrance2);
 
-        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(fragrances);
+        when(fragrancesRepository.findAllByIdWithNotes(fragranceIds)).thenReturn(fragrances);
 
         var response = internalFragranceService.getFragrance(param, baseParam);
 
@@ -139,7 +139,7 @@ class InternalFragranceServiceImpl11Test {
         assertEquals(fragrance1.getBrand(), firstResponse.brand());
         assertEquals(fragrance1.getDescription(), firstResponse.description());
 
-        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
+        verify(fragrancesRepository, times(1)).findAllByIdWithNotes(fragranceIds);
     }
 
     @Test
@@ -147,7 +147,7 @@ class InternalFragranceServiceImpl11Test {
         var fragranceIds = new HashSet<>(Collections.singletonList(1L));
         var param = new GetFragranceBatchParam(fragranceIds);
 
-        when(fragrancesRepository.findAllById(fragranceIds)).thenReturn(Collections.emptyList());
+        when(fragrancesRepository.findAllByIdWithNotes(fragranceIds)).thenReturn(Collections.emptyList());
 
         var response = internalFragranceService.getFragrance(param, baseParam);
 
@@ -157,6 +157,6 @@ class InternalFragranceServiceImpl11Test {
         assertNotNull(response.data());
         assertTrue(response.data().fragrances().isEmpty());
 
-        verify(fragrancesRepository, times(1)).findAllById(fragranceIds);
+        verify(fragrancesRepository, times(1)).findAllByIdWithNotes(fragranceIds);
     }
 }

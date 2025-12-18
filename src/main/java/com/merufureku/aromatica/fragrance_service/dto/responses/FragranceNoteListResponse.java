@@ -12,8 +12,8 @@ public record FragranceNoteListResponse(List<FragranceNoteList> fragranceNoteLis
             this(
                 fragrance.getId(),
                 fragrance.getNotes().stream()
-                .map(NoteResponse::new)
-                .toList()
+                        .map(NoteResponse::new)
+                        .toList()
             );
         }
 

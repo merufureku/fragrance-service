@@ -69,7 +69,7 @@ public class FragranceServiceImpl1 implements IFragranceService {
     public BaseResponse<FragranceDetailedResponse> getFragrance(long id, BaseParam baseParam) {
         logger.info("Fetching fragrance details for ID: {}", id);
 
-        var fragrance = fragrancesRepository.findById(id)
+        var fragrance = fragrancesRepository.findByIdWithNotes(id)
                 .orElseThrow(() -> new ServiceException(CustomStatusEnums.FRAGRANCE_NOT_FOUND));
 
         return new BaseResponse<>(HttpStatus.OK.value(), "Get Fragrance Detail Success", new FragranceDetailedResponse(fragrance));
@@ -135,7 +135,7 @@ public class FragranceServiceImpl1 implements IFragranceService {
     public BaseResponse<NoteListResponse> getFragranceNotes(Long id, Pageable pageable, BaseParam baseParam) {
         logger.info("Fetching Fragrance Notes for ID: {}", id);
 
-        var fragranceToGet = fragrancesRepository.findById(id)
+        var fragranceToGet = fragrancesRepository.findByIdWithNotes(id)
                 .orElseThrow(() -> new ServiceException(FRAGRANCE_NOT_FOUND));
 
         var response = fragranceToGet.getNotes().stream()
