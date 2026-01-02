@@ -2,7 +2,8 @@ package com.merufureku.aromatica.fragrance_service.dto.responses;
 
 import com.merufureku.aromatica.fragrance_service.dao.entity.Fragrance;
 
-public record FragranceResponse(Long id, String name, String brand, String type, String countryOfOrigin) {
+public record FragranceResponse(Long id, String name, String brand,
+                                String type, String countryOfOrigin, String imageUrl) {
 
     public FragranceResponse(Fragrance fragrance){
         this(
@@ -10,7 +11,8 @@ public record FragranceResponse(Long id, String name, String brand, String type,
                 fragrance.getName(),
                 fragrance.getBrand(),
                 fragrance.getType(),
-                fragrance.getCountryOfOrigin()
+                fragrance.getCountryOfOrigin(),
+                fragrance.getImageUrl()
         );
     }
 }
