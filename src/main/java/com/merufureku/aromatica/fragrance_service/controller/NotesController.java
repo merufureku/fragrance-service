@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,6 +38,7 @@ public class NotesController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/notes")
     @Operation(summary = "Insert new notes")
     public ResponseEntity<BaseResponse<Void>> insertNotes(
@@ -50,6 +52,7 @@ public class NotesController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/notes/{id}")
     @Operation(summary = "Get note by ID")
     public ResponseEntity<BaseResponse<NoteResponse>> getNote(
@@ -63,6 +66,7 @@ public class NotesController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/notes/{id}")
     @Operation(summary = "Delete note by ID")
     public ResponseEntity<Void> deleteNote(
