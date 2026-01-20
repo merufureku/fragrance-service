@@ -11,6 +11,7 @@ public record FragranceDetailedListResponse(List<FragranceDetailedResponse> frag
             String name,
             String brand,
             String description,
+            String imageUrl,
             List<NoteResponse> noteResponse){
 
         public FragranceDetailedResponse(Fragrance fragrance){
@@ -19,6 +20,7 @@ public record FragranceDetailedListResponse(List<FragranceDetailedResponse> frag
                     fragrance.getName(),
                     fragrance.getBrand(),
                     fragrance.getDescription(),
+                    fragrance.getImageUrl(),
                     fragrance.getNotes().stream()
                             .map(NoteResponse::new)
                             .toList()
