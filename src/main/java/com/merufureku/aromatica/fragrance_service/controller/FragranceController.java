@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,6 +52,7 @@ public class FragranceController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/fragrances")
     @Operation(summary = "Insert Fragrance")
     public ResponseEntity<BaseResponse<InsertFragranceResponse>> createFragrance(
@@ -64,6 +66,7 @@ public class FragranceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/fragrances/{id}")
     @Operation(summary = "Update Fragrance")
     public ResponseEntity<Void> updateFragrance(
@@ -78,6 +81,8 @@ public class FragranceController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/fragrances/{id}")
     @Operation(summary = "Delete Fragrance")
     public ResponseEntity<Void> deleteFragrance(
@@ -105,6 +110,7 @@ public class FragranceController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/fragrances/{id}/notes")
     @Operation(summary = "Insert New Fragrance Note")
     public ResponseEntity<Void> updateFragranceNote(
@@ -119,6 +125,7 @@ public class FragranceController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/fragrances/{id}/notes/{noteId}")
     @Operation(summary = "Delete Fragrance Note")
     public ResponseEntity<Void> deleteFragranceNote(
