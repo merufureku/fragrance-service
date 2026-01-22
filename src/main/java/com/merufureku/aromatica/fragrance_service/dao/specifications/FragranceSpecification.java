@@ -20,7 +20,7 @@ public class FragranceSpecification {
     public static Specification<Fragrance> hasGender(String gender) {
         return (root, query, criteriaBuilder) ->
                 gender == null ? null :
-                        criteriaBuilder.like(criteriaBuilder.lower(root.get("gender")), "%" + gender.toLowerCase() + "%");
+                        criteriaBuilder.equal(root.get("gender"), gender);
     }
 
     public static Specification<Fragrance> hasType(String type) {
