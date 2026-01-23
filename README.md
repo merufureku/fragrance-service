@@ -118,7 +118,7 @@ The Recommendation Service calls the internal endpoints to get fragrance data in
 
 ## Related Services
 
-- [Auth Service](../auth-service) - Authentication
-- [Collection Service](../collection-service) - User collections
-- [Review Service](../review-service) - Reviews and ratings
-- [Recommendation Service](../recommendation-service) - Uses this service for note data
+- [Auth Service](https://github.com/merufureku/aromatica-auth-service) - Authentication
+- [Collection Service](https://github.com/merufureku/aromatica-collection-service) - User collections
+- [Recommendation Service](https://github.com/merufureku/aromatica-recommendation-service) - Uses reviews for CF algorithm
+- [Review Service](https://github.com/merufureku/aromatica-review-service) - Gets review/rating data
